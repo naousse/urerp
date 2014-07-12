@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock -  Affichage de l'achat  : #{achatBean.achat.numero}
+        </ui:define>
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="q" value="#{achatBean.achatId}"/>
+                <f:viewParam name="activ_tab" value="#{achatBean.activTab}"/>
+            </f:metadata>
+            <h:form id="achatShow">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:fieldset legend="Informations sur l'achat">
+                        <p:panelGrid columns="6" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.achat.numero']}" />
+                            <h:outputText value="#{achatBean.achat.numero}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.achat.date']}" />
+                            <h:outputText value="#{achatBean.achat.dateOperation}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset legend="Informations sur le fournisseur">
+                        <p:panelGrid columns="6" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.code']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.code}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.nom']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.nom}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.pays']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.pays}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.telephone']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.adresse.telephone}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.email']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.adresse.email}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.boitePostal']}" />
+                            <h:outputText value="#{achatBean.achat.partenaire.adresse.boitePostal}" />
+
+                            <h:outputText value="#{achatBean.activTab}" />
+
+                        </p:panelGrid>
+                    </p:fieldset>
+
+                    <p:tabView activeIndex="#{achatBean.activTab}" id="dataTabView">
+                        <p:tab title="liste des produits commandés">
+                            <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{achatBean.achat.ligneOperations}"
+                                         rowKey="#{ligneOperation.id}" selection="#{achatBean.ligneOperation}" selectionMode="single"
+                                         paginator="true" rows="10" rowsPerPageTemplate="2,5"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                                </p:column>
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.quantite']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.quantite}" /> 
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.prixU}" /> 
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.prixTotal']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.prixU*ligneOperation.quantite}" /> 
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:tab>
+
+                        <p:tab title="liste des livraisons">
+                            <p:dataTable id="dataTableLivraison" paginatorPosition="bottom" var="ligneOperation" value="#{achatBean.achat.ligneOperations}"
+                                         rowKey="#{ligneOperation.id}" selection="#{achatBean.ligneOperation}" selectionMode="single"
+                                         paginator="true" rows="10" rowsPerPageTemplate="2,5"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.livraison.numero']}" />  
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.livraison.date']}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <h:panelGrid columns="2">
+                                <p:button id="saveLivraison" value="New" outcome="#{achatBean.doNewLivraison()}">
+                                    <f:param name="q" value="#{achatBean.achatId}"/>
+                                </p:button>
+                                <p:commandButton id="closeLivraison" value="Cancel" onclick="paiementDialog.hide()" />
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="liste des paiements">
+                            <h:panelGrid columns="1" style="width: 100%">
+                                <p:dataTable id="dataTablePaiement" paginatorPosition="bottom" var="ligneOperation" value="#{achatBean.allPaiementsAchat}"
+                                             rowKey="#{ligneOperation.id}" selection="#{achatBean.ligneOperation}" selectionMode="single"
+                                             paginator="true" rows="10" rowsPerPageTemplate="2,5"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                             {RowsPerPageDropdown}"
+                                             >
+                                    <p:ajax event="rowSelect" update=":achatShow:dataTabView:delete_url"/>
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <h:outputText value="#{msg['urerp.view.achat.numero']}" />  
+                                        </f:facet>
+                                        <h:outputText value="#{ligneOperation.numero}" /> 
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <h:outputText value="#{msg['urerp.view.paiement.date']}" />  
+                                        </f:facet>
+                                        <h:outputText value="#{ligneOperation.dateOperation}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <h:outputText value="#{msg['urerp.view.paiement.montant']}" />  
+                                        </f:facet>
+                                        <h:outputText value="#{ligneOperation.montant}" /> 
+                                    </p:column>
+                                </p:dataTable>
+
+                                <h:panelGrid columns="3" >
+                                    <p:commandButton value="Ajouter" onclick="paiementDialog.show();"/>
+                                    <p:commandButton value="Edit" action="#{paiementBean.doEdit()}" ajax="false" immediate="true"/>
+                                    <p:button disabled="#{paiementListBean.buttonDisabled}" value="Delete" id="delete_url" outcome="#{paiementBean.deleteUrl}"> 
+                                        <f:param name="q" value="#{paiementBean.paiement.id}"/>
+                                    </p:button>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:tabView>
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:commandButton value="Liste" action="#{achatBean.doList()}" ajax="false" immediate="true" /> 
+                            <p:commandButton value="Edit" action="#{achatBean.doEdit()}" ajax="false" immediate="true"/> 
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid> 
+
+                <!-- Fenetre de dialogue pour ajout d'une livraison-->
+                <p:dialog widgetVar="livraisonDialog" width="70%" header="Nouvelle Livraison" >
+
+                    <h:panelGrid columns="4" cellpadding="10" id="dataLivraison">
+
+                    </h:panelGrid>   
+                </p:dialog>
+                <!-- Fin Fenetre-->
+                <!--  Fenetre de dialogue pour ajout d'un paiement-->
+                <p:dialog widgetVar="paiementDialog" header="Nouveau Paiement" >
+                    <h:form id="formPaiement">
+                        <h:panelGrid columns="1" cellpadding="5">
+
+                            <p:fieldset>
+                                <h:panelGrid columns="4" cellpadding="10" id="dataPaiement">
+                                    <h:outputLabel for="numeroPaiement" value="#{msg['urerp.view.achat.numero']}" /> 
+                                    <h:panelGroup>
+                                        <h:inputText id="numeroPaiement" value="#{achatBean.paiement.numero}"/>
+                                        <p:message for="numeroPaiement"/>
+                                    </h:panelGroup>
+                                    <h:outputLabel for="datePaiement" value="#{msg['urerp.view.paiement.date']}" /> 
+                                    <h:panelGroup>
+                                        <p:calendar id="datePaiement" value="#{achatBean.paiement.dateOperation}" locale="fr"/>
+                                        <p:message for="datePaiement"/>
+                                    </h:panelGroup>
+                                    <h:outputLabel for="montantPaiement" value="#{msg['urerp.view.paiement.montant']}" />
+                                    <h:panelGroup>
+                                        <h:inputText id="montantPaiement" value="#{achatBean.paiement.montant}"/>
+                                        <p:message for="montantPaiement"/>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Action">
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Enregistrer" process=":achatShow:formPaiement" id="savePaiement" actionListener="#{achatBean.addPaiement(actionEvent)}" update="dataPaiement,:achatShow:dataTabView:dataTablePaiement,:messages"/>
+                                    <p:commandButton id="closePaiement" value="Annuler" onclick="paiementDialog.hide()" />
+                                </h:panelGrid>
+                            </p:fieldset>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <!-- Fin Fenetre-->
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

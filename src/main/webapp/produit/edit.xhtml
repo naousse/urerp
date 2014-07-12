@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock -  Modification d'un produit : #{produitBean.produit.designation}
+        </ui:define>
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="q" value="#{produitBean.produitId}"/>
+            </f:metadata>
+
+            <h:form id="produitList">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:fieldset legend="Informations sur le produit">
+
+                        <h:panelGrid columns="4" cellpadding="15">
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.reference']}" />
+                            <h:panelGroup>
+                                <p:inputText id="produit" value="#{produitBean.produit.reference}"
+                                             required="true"  requiredMessage="Le numéro de cni est obligatoire"/>
+                                <p:message for="produit"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.designation']}"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{produitBean.produit.designation}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.quantite']}"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{produitBean.produit.quantiteEnStock}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.quantiteSeuil']}"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{produitBean.produit.seuilDeSecurité}"/>
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                        
+                        <p:fieldset legend="Action">
+                            <p:commandButton value="Liste" action="#{produitBean.doList}" ajax="false" immediate="true"/>
+                            <p:commandButton value="Modifier" action="#{produitBean.doUpdate()}" ajax="false">
+                            </p:commandButton>
+                        </p:fieldset>
+                        
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Nouvelle Facture #{factureBean.facture.numero}
+        </ui:define>
+        <ui:define name="content">
+
+            <h:body>
+                <h:form id="factureNew">
+                    <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                        <p:fieldset legend="Nouvelle facture">
+                            <h:panelGrid columns='4' cellpadding="2" style="width: 100%">
+                                <p:outputLabel value="#{msg['urerp.view.facture.numero']}  :  "/>
+                                <h:panelGroup>
+                                    <p:inputText id="titre" value="#{factureBean.facture.numero}"
+                                                 required="true"  requiredMessage="Le Numéro est obligatoire" />
+                                    <p:message for="titre"/>
+                                </h:panelGroup>
+                                <p:outputLabel value="#{msg['urerp.view.facture.date']}  :  "/>
+                                <h:panelGroup>
+                                    <p:inputText value="#{factureBean.facture.dateOperation}"
+                                                 required="true"  requiredMessage="La date est obligatoire" />
+                                    <p:message for="titre"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <p:fieldset legend="Détails facture">
+                            <h:panelGrid columns='5' cellpadding="4" style="width: 100%">
+                                <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{achatBean.achat.ligneOperations}"
+                                             rowKey="#{ligneOperation.id}" selection="#{achatBean.ligneOperation}" selectionMode="single"
+                                             paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                             {RowsPerPageDropdown}"
+                                             >
+                                    <p:column>
+                                        <f:facet name="header">  
+                                            <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                        </f:facet>
+                                        <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                                    </p:column>
+                                    <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.quantite']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.quantite}" /> 
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.prixU}" /> 
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.ligneOperation.prixTotal']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.prixU*ligneOperation.quantite}" /> 
+                                </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <p:fieldset legend="Action">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton value="Liste" action="#{factureBean.doList}" ajax="false" immediate="true"/>
+                                <p:commandButton value="Enregistrer" action="#{factureBean.doCreate}" ajax="false"/>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </h:panelGrid>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>
+

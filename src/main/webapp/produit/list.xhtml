@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock : Liste des Produits
+        </ui:define>
+        <ui:define name="content">
+        <h:form id="produitList">
+            <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                <p:dataTable id="dataTable" paginatorPosition="bottom" var="produit" value="#{produitListBean.allProduits}"
+                             rowKey="#{produit.id}" selection="#{produitListBean.produit}" selectionMode="single"
+                                 paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                    <f:facet name="header">  
+                        Liste des produits
+                    </f:facet> 
+
+                    <p:ajax event="rowSelect" update=":produitList:show_url, :produitList:edit_url"/>
+                    <p:column>  
+                        <f:facet name="header">  
+                            <h:outputText value="#{msg['urerp.view.produit.reference']}" />  
+                        </f:facet>  
+                        <h:outputText value="#{produit.reference}" />  
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                        <h:outputText value="#{msg['urerp.view.produit.designation']}" />    
+                        </f:facet>
+                        <h:outputText value="#{produit.designation}" />
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                        <h:outputText value="#{msg['urerp.view.produit.quantite']}" />    
+                        </f:facet>
+                        <h:outputText value="#{produit.quantiteEnStock}" />
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                        <h:outputText value="#{msg['urerp.view.produit.quantiteSeuil']}" />    
+                        </f:facet>
+                        <h:outputText value="#{produit.seuilDeSecurité}" />
+                    </p:column>
+                </p:dataTable>
+                
+                <p:fieldset legend="Action">
+                        <h:panelGrid columns="5" cellpadding="5">
+                            <p:commandButton value="New" action="#{produitBean.doNew()}" ajax="false" /> 
+
+                            <p:button disabled="#{produitListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{produitListBean.editUrl}"> 
+                                <f:param name="q" value="#{produitListBean.produit.id}"/>
+                            </p:button>
+
+                            <p:button disabled="#{produitListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{produitListBean.showUrl}" > 
+                                <f:param name="q" value="#{produitListBean.produit.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Nouvelle Fonction #{fonctionBean.fonction.libelle}
+        </ui:define>
+        <ui:define name="content">
+
+            <h:body>
+                <h:form id="formFonction">
+                    <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                        <p:fieldset legend="Nouvelle fonction">
+                            <p:outputLabel value="#{msg['urerp.view.fonction.title']}  :  "/>
+
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{fonctionBean.fonction.libelle}"
+                                             required="true"  requiredMessage="La fonction est obligatoire" validator="fonctionValidator"/>
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+                        </p:fieldset>
+                        <p:fieldset legend="Action">
+                            <p:commandButton value="Liste" action="#{fonctionBean.doList}" ajax="false" immediate="true"/>
+                            <p:commandButton value="Enregistrer" action="#{fonctionBean.doCreate}" ajax="false"/>
+                        </p:fieldset>
+                    </h:panelGrid>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>
+

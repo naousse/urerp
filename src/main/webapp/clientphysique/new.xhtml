@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Liste des clients
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="cphysiqueNew">
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                    <p:fieldset legend="Identité du client">
+                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{cPhysiqueBean.clientPhysique.cni}"
+                                             required="true"  requiredMessage="La cni est obligatoire" validator="cniValidator"/>
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.nom']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cPhysiqueBean.clientPhysique.nom}"
+                                             required="true"  requiredMessage="Le Nom est obligatoire" />
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.prenom']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cPhysiqueBean.clientPhysique.prenom}" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.telephone']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cPhysiqueBean.clientPhysique.adresse.telephone}" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.email']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cPhysiqueBean.clientPhysique.adresse.email}" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.boitePostal']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cPhysiqueBean.clientPhysique.adresse.boitePostal}" />
+                            </h:panelGroup>
+                        </h:panelGrid>   
+                    </p:fieldset>
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="3" cellpadding="5">  
+                            <p:commandButton value="Liste" action="#{cPhysiqueBean.doList()}" ajax="false" immediate="true"/>
+                            <p:commandButton value="Enregistrer" action="#{cPhysiqueBean.doCreate}" ajax="false"/>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

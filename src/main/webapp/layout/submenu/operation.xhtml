@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <h:form id="submenu">
+            <p:menu>
+                <p:submenu label="Resources">
+                    <p:menuitem value="Fonction" action="#{fonctionBean.doList}" ajax="false" />
+                    <p:menuitem value="Employe" action="#{employeBean.doList}" ajax="false" />
+                    <p:menuitem value="Fournisseur" action="#{fournisseurBean.doList()}" ajax="false" />
+                    <p:menuitem value="Produit" action="#{produitBean.doList()}" ajax="false" />
+                    <p:menuitem value="Facture" action="#{factureBean.doList()}" ajax="false" />
+                    <p:menuitem value="Achat" action="#{achatBean.doList()}" ajax="false" />
+                    <p:menuitem value="Vente" action="#{venteBean.doList()}" ajax="false" />
+                    <p:menuitem value="Client Entreprise" action="#{cEntrepriseBean.doList()}" ajax="false" />
+                    <p:menuitem value="Client Physique" action="#{cPhysiqueBean.doList()}" ajax="false" />
+                    <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
+                    <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
+                    <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
+
+                </p:submenu>
+            </p:menu>
+        </h:form> 
+    </h:body>
+</html>
+

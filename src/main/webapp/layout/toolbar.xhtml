@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="toolbar">   
+            <p:toolbar>  
+                <p:toolbarGroup align="left">  
+                    <p:commandButton type="button" value="Achat" icon="ui-icon-folder-open"/>  
+                    <p:commandButton type="button" value="Vente" icon="ui-icon-folder-open"/>  
+                    <p:commandButton type="button" value="Stock" icon="ui-icon-folder-open"/>  
+                    <p:commandButton type="button" value="Ressources Humaines" icon="ui-icon-folder-open" />  
+                    <p:commandButton type="button" value="Comptabilité" icon="ui-icon-folder-open"/>  
+                    <p:commandButton type="button" value="Partenaire" icon="ui-icon-folder-open"/>
+
+                    <p:separator  />  
+
+                </p:toolbarGroup>  
+
+                <p:toolbarGroup align="right">  
+                    <p:menuButton value="User: Guest">  
+                        <p:menuitem value="Connexion" url="http://www.primefaces.org" icon="ui-icon-disk" />   
+                    </p:menuButton> 
+                    <p:separator /> 
+                    <p:commandButton type="button" title="Save" image="en_flag"/>  
+                    <p:commandButton type="button" title="Save" image="fr_flag"/>  
+                </p:toolbarGroup>  
+
+            </p:toolbar>  
+        </h:form>  
+    </h:body>
+</html>
+

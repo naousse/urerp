@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du Stock : Nouvelle Livraison
+        </ui:define>
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="q" value="#{livraisonBean.achatId}"/>
+            </f:metadata>
+            <h:form id="livraisonNew">
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                    <p:fieldset legend="Informations sur l'achat">
+                        <p:panelGrid columns="6" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.achat.numero']}" />
+                            <h:outputText value="#{livraisonBean.achat.numero}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.achat.date']}" />
+                            <h:outputText value="#{livraisonBean.achat.dateOperation}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset legend="Informations sur le fournisseur">
+                        <p:panelGrid columns="6" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.code']}" />
+                            <h:outputText value="#{livraisonBean.achat.partenaire.code}" />
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.nom']}" />
+                            <h:outputText value="#{livraisonBean.achat.partenaire.nom}" />
+                        </p:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset legend="Informations sur la livraison">
+                        <h:panelGrid columns='4' cellpadding="2" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.livraison.numero']}" />
+                            <p:inputText value="#{livraisonBean.livraison.numero}" id="numeroLivraison"/>
+                            <p:outputLabel value="#{msg['urerp.view.livraison.date']}" />
+                            <p:calendar value="#{livraisonBean.livraison.dateOperation}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:calendar>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                        <p:dataTable id="dataTableProduitLivré" paginatorPosition="bottom" var="ligneLivraison" value="#{livraisonBean.ligneOperations}"
+                                     rowKey="#{ligneLivraison.id}" selection="#{livraisonBean.ligneLivraison}" selectionMode="single"
+                                     paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                     {RowsPerPageDropdown}"
+                                     >
+                            <f:facet name="header">  
+                                Liste des produits livrés 
+                            </f:facet>
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneLivraison.produit.designation}" /> 
+                            </p:column>
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneLivraison.quantite}" /> 
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="4" cellpadding="5">  
+                            <p:button value="Retour" id="back_url" outcome="#{livraisonBean.backUrl}" > 
+                                <f:param name="q" value="#{livraisonBean.achat.id}"/>
+                                <f:param name="activ_tab" value="1"/>
+                            </p:button>
+                            <p:commandButton value="Ajouter" onclick="editorDialog.show();"/>
+                            <p:commandButton value="Enregistrer" action="#{livraisonBean.doCreate()}" ajax="false"/>
+                            <p:commandButton value="Modifier" action="#{livraisonBean.doUpdate()}" ajax="false"/>
+                        </h:panelGrid> 
+                    </p:fieldset>
+                </h:panelGrid>
+
+                <p:dialog widgetVar="editorDialog" width="70%" header="Produits Commandés" >
+
+                    <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
+                        <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{livraisonBean.achat.ligneOperations}"
+                                     rowKey="#{ligneOperation.id}" selection="#{livraisonBean.ligneOperation}" selectionMode="single"
+                                     paginator="true" rows="10" rowsPerPageTemplate="2,5"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                     {RowsPerPageDropdown}"
+                                     >
+                            <f:facet name="header">  
+                                Liste des produits
+                            </f:facet>
+                            <p:ajax event="rowSelect" update=":livraisonNew:selectProduct"/>
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                            </p:column>
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.ligneOperation.quantite']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.quantite}" /> 
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:fieldset legend="Informations Produits">
+                            <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="selectProduct">
+                                <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{livraisonBean.produit.designation}"  id="designationProduit" />
+                                </h:panelGroup>
+                                <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{livraisonBean.quantite}" id="quantiteProduit" />
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <p:fieldset legend="Action">
+                            <h:panelGrid columns="3" cellpadding="5">  
+                                <p:commandButton value="Enregistrer" id="save" actionListener="#{livraisonBean.addProductLivraison(actionEvent)}" update=":livraisonNew:dataTableProduitLivré"/>
+                                <p:commandButton value="Annuler"  onclick="editorDialog.hide();"/>
+                            </h:panelGrid> 
+                        </p:fieldset>  
+                    </h:panelGrid>   
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

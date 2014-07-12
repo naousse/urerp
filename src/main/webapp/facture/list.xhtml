@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Liste des factures
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="factureList">  
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:dataTable id="dataTable" var="facture" value="#{factureListBean.allFactures}"
+                                 rowKey="#{facture.id}" selection="#{factureListBean.facture}" selectionMode="single"
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >  
+                        <f:facet name="header">  
+                            Liste des factures 
+                        </f:facet>  
+
+                        <p:ajax event="rowSelect" update=":factureList:show_url, :factureList:edit_url"
+                                />
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.facture.prixTotal']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{facture.dateOperation}" />  
+                        </p:column>  
+                        
+                    </p:dataTable>  
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="5" cellpadding="5">
+                            <p:commandButton value="New" action="#{factureBean.doNew}" ajax="false" /> 
+
+                            <p:button disabled="#{factureListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{factureListBean.editUrl}"> 
+                                <f:param name="q" value="#{factureListBean.facture.id}"/>
+                            </p:button>
+                            <p:button disabled="#{factureListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{factureListBean.showUrl}" > 
+                                <f:param name="q" value="#{factureListBean.facture.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>    
+            </h:form>
+        </ui:define>
+    </ui:composition>  
+
+</html>
+

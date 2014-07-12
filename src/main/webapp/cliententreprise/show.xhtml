@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Informations sur le client : #{cEntrepriseBean.clientEntreprise.nom}
+        </ui:define>
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="q" value="#{cEntrepriseBean.clientEntrepriseId}" />
+            </f:metadata>
+            <h:form id="entrepriseShow">
+                <h:panelGrid columns="1" cellpadding="6" style="width: 100%">
+
+                    <p:fieldset legend="Information sur le client">
+
+                        <p:panelGrid columns="4" style="width: 100%">
+                            
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.nom']}"/>
+                            <h:outputText  value="#{cEntrepriseBean.clientEntreprise.nom}"/>
+                            
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.telephone']}"/>
+                            <h:outputText value="#{cEntrepriseBean.clientEntreprise.adresse.telephone}"/>
+
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.email']}"/>
+                            <h:outputText value="#{cEntrepriseBean.clientEntreprise.adresse.email}"/>
+
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.boitePostal']}"/>
+                            <h:outputText value="#{cEntrepriseBean.clientEntreprise.adresse.boitePostal}"/>
+                        </p:panelGrid>
+                    </p:fieldset> 
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="2" cellpadding="5">  
+                            <p:commandButton value="Liste" action="#{cEntrepriseBean.doList()}" ajax="false"/>
+                            <p:button value="Edit" id="edit_url" outcome="#{cEntrepriseListBean.editUrl}"> 
+                                <f:param name="q" value="#{cEntrepriseBean.clientEntreprise.id}"/>
+                            </p:button>
+                        </h:panelGrid> 
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

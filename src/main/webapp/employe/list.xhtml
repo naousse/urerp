@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+   
+            <ui:composition template="./../index.xhtml">
+                <ui:define name="title">
+                    Ressources Humaines : Liste des employés
+                </ui:define>
+                <ui:define name="content">
+                <h:form id="employeList">  
+                    <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                        <p:dataTable id="dataTable" paginatorPosition="bottom" var="employe" value="#{employeListBean.allEmployes}"
+                                     rowKey="#{employe.id}" selection="#{employeListBean.employe}" selectionMode="single"
+                                     paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                     {RowsPerPageDropdown}"
+                                     >  
+                            <f:facet name="header">  
+                                Liste des employes 
+                            </f:facet>  
+
+                            <p:ajax event="rowSelect" update=":employeList:show_url, :employeList:edit_url"/>
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.employe.cni']}" />  
+                                </f:facet>
+                                <h:outputText value="#{employe.cni}" /> 
+                            </p:column>
+
+                            <p:column>  
+                               <f:facet name="header">  
+                                   <h:outputText value="#{msg['urerp.view.employe.nom']}" />  
+                                </f:facet>  
+                               <h:outputText value="#{employe.nom}" /> 
+                            </p:column>
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.employe.prenom']}" />  
+                                </f:facet>  
+                                <h:outputText value="#{employe.prenom}" /> 
+                            </p:column>
+
+                        </p:dataTable>  
+
+
+                        <p:fieldset legend="Action">
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:commandButton value="New" action="#{employeBean.doNew}" ajax="false" /> 
+
+                                <p:button disabled="#{employeListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{employeListBean.editUrl}"> 
+                                    <f:param name="q" value="#{employeListBean.employe.id}"/>
+                                </p:button>
+
+                                <p:button disabled="#{employeListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{employeListBean.showUrl}" > 
+                                     <f:param name="q" value="#{employeListBean.employe.id}"/>
+                                </p:button>
+                             </h:panelGrid>
+                        </p:fieldset>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+         </ui:composition>
+    
+</html>

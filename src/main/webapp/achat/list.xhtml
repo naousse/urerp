@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock : Liste des achats
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="achatList">
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                    <p:dataTable id="dataTable" paginatorPosition="bottom" var="achat" value="#{achatListBean.allAchats}"
+                                 rowKey="#{achat.id}" selection="#{achatListBean.achat}" selectionMode="single"
+                                 paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                        <f:facet name="header">  
+                            Liste des achats 
+                        </f:facet>
+                        <p:ajax event="rowSelect" update=":achatList:show_url, :achatList:edit_url, :achatList:delete_url"/>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.achat.numero']}" />  
+                            </f:facet>
+                            <h:outputText value="#{achat.numero}" /> 
+                        </p:column>
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.achat.date']}" />  
+                            </f:facet>
+                            <h:outputText value="#{achat.dateOperation}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:commandButton value="New" action="#{achatBean.doNew()}" ajax="false" /> 
+
+                            <p:button disabled="#{achatListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{achatListBean.editUrl}"> 
+                                <f:param name="q" value="#{achatListBean.achat.id}"/>
+                            </p:button>
+                            <p:button disabled="#{achatListBean.buttonDisabled}" value="Delete" id="delete_url" outcome="#{achatListBean.deleteUrl}"> 
+                                <f:param name="q" value="#{achatListBean.achat.id}"/>
+                            </p:button>
+                            <p:button disabled="#{achatListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{achatListBean.showUrl}" > 
+                                <f:param name="q" value="#{achatListBean.achat.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

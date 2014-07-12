@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Modification de la facture #{factureBean.facture.numero}
+        </ui:define>
+        <ui:define name="content">
+            
+            <h:form id="editFacture">
+            <f:metadata>
+                <f:viewParam name="q" value="#{factureBean.factureId}"/>
+            </f:metadata>
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:fieldset legend="Informations sur la facture">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="#{msg['urerp.view.facture.numero']}  :"/>
+
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{factureBean.facture.numero}"
+                                            required="true"  requiredMessage="Le Numéro est obligatoire"/>
+                              <p:message for="titre"/>
+                            </h:panelGroup>
+                            
+                    </h:panelGrid>
+
+                    </p:fieldset>
+
+                    <p:fieldset legend="Action">
+                            <h:panelGrid columns="2" cellpadding="5">  
+                                <p:commandButton value="Liste" action="#{factureBean.doList}" ajax="false" immediate="true"/>
+                                <p:commandButton value="Modifier" action="#{factureBean.doUpdate()}" ajax="false"/>
+                         </h:panelGrid> 
+                    </p:fieldset>
+
+                </h:panelGrid>
+                
+           </h:form>
+      </ui:define>
+    </ui:composition>
+</html>
+

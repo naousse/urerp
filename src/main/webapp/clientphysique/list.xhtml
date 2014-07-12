@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Liste des Clients
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="cphysiqueList">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:dataTable id="dataTable" paginatorPosition="bottom" var="cphysique" value="#{cPhysiqueListBean.allCPhysique}"
+                                 rowKey="#{cphysique.id}" selection="#{cPhysiqueListBean.clientPhysique}" selectionMode="single"     
+                                 paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                        <f:facet name="header">  
+                            Liste des clients physiques 
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":cphysiqueList:show_url, :cphysiqueList:edit_url"/>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.cni']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.cni}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.nom']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.nom}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.prenom']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.prenom}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.telephone']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.adresse.telephone}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.email']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.adresse.email}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientPhysique.boitePostal']}" />  
+                            </f:facet>
+                            <h:outputText value="#{cphysique.adresse.boitePostal}" /> 
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:commandButton value="New" action="#{cPhysiqueBean.doNew}" ajax="false" /> 
+
+                            <p:button disabled="#{cPhysiqueListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{cPhysiqueListBean.editUrl}"> 
+                                <f:param name="q" value="#{cPhysiqueListBean.clientPhysique.id}"/>
+                            </p:button>
+
+                            <p:button disabled="#{cPhysiqueListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{cPhysiqueListBean.showUrl}" > 
+                                <f:param name="q" value="#{cPhysiqueListBean.clientPhysique.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>  
+        </ui:define>
+    </ui:composition>
+</html>

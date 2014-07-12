@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock -  Affichage du produit  : #{produitBean.produit.id}
+        </ui:define>
+        <ui:define name="content">
+
+            <f:metadata>
+                <f:viewParam name="q" value="#{produitBean.produitId}"/>
+            </f:metadata>
+            <h:form id="show">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+
+                    <p:fieldset legend="Information sur le produit">
+                        <p:panelGrid columns="4" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.produit.reference']}"/>
+                            <h:outputText id="produit" value="#{produitBean.produit.reference}"/>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.designation']}"/>
+                            <h:outputText value="#{produitBean.produit.designation}"/>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.quantite']}"/>
+                            <h:outputText value="#{produitBean.produit.quantiteEnStock}"/>
+
+                            <p:outputLabel value="#{msg['urerp.view.produit.quantiteSeuil']}"/>
+                            <h:outputText value="#{produitBean.produit.seuilDeSecurité}"/>
+
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="3" cellpadding="5">  
+                            <p:commandButton value="Liste" action="#{produitBean.doList()}" ajax="false"/>
+                            <p:button value="Edit" id="edit_url" outcome="#{produitListBean.editUrl}"> 
+                                <f:param name="q" value="#{produitBean.produit.id}"/>
+                            </p:button>
+                        </h:panelGrid> 
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

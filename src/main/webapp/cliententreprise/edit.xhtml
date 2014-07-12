@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Modification du client #{cEntrepriseBean.clientEntreprise.nom}
+        </ui:define>
+        <ui:define name="content">
+            
+            <h:form id="editEntreprise">
+            <f:metadata>
+                <f:viewParam name="q" value="#{cEntrepriseBean.clientEntrepriseId}"/>
+            </f:metadata>
+                
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:fieldset legend="Informations sur le client">
+                        <h:panelGrid columns="4" cellpadding="20">
+                            
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.nom']}  :"/>
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{cEntrepriseBean.clientEntreprise.nom}"
+                                            required="true"  requiredMessage="Le Nom est obligatoire"/>
+                              <p:message for="titre"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.telephone']}  :"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cEntrepriseBean.clientEntreprise.adresse.telephone}" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.email']}  :"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cEntrepriseBean.clientEntreprise.adresse.email}" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientEntreprise.boitePostal']}  :"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{cEntrepriseBean.clientEntreprise.adresse.boitePostal}" />
+                            </h:panelGroup>
+                           
+                    </h:panelGrid>
+
+                    </p:fieldset>
+
+                    <p:fieldset legend="Action">
+                            <h:panelGrid columns="2" cellpadding="5">  
+                                <p:commandButton value="Liste" action="#{cEntrepriseBean.doList}" ajax="false" immediate="true"/>
+                                <p:commandButton value="Modifier" action="#{cEntrepriseBean.doUpdate()}" ajax="false"/>
+                         </h:panelGrid> 
+                    </p:fieldset>
+
+                </h:panelGrid>
+                
+           </h:form>
+      </ui:define>
+    </ui:composition>
+</html>
+

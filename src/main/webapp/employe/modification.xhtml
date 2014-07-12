@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <ui:composition template="./../index.xhtml">
+                <ui:define name="title">
+                    Ressources Humaines -  Changement de la fonction d'un employé : #{employeBean.employe.nom}
+                </ui:define>
+               <ui:define name="content">
+                   
+                <f:metadata>
+                    <f:viewParam name="q" value="#{employeBean.employeId}"/>
+               </f:metadata>
+          
+                <h:form id="formEmploye">
+                    <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                        <p:fieldset legend="Information Employé">
+
+                            <h:panelGrid columns="6" cellpadding="5">
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.cni']}"/>
+
+                                <h:panelGroup>
+                                    <p:inputText id="employé" value="#{employeBean.employe.cni}"
+                                           required="true"  requiredMessage="Le numéro de cni est obligatoire"/>
+                                    <p:message for="employé"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.nom']}"/>
+                                    <h:panelGroup>
+                                        <p:inputText value="#{employeBean.employe.nom}"/>
+                                    </h:panelGroup>
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.prenom']}"/>
+                                    <h:panelGroup>
+                                        <p:inputText value="#{employeBean.employe.prenom}" />
+                                    </h:panelGroup>
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.telephone']}"/>
+                                    <h:panelGroup>
+                                        <p:inputText value="#{employeBean.employe.adresse.telephone}"/>
+                                    </h:panelGroup>
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.email']}"/>
+                                    <h:panelGroup>
+                                        <p:inputText value="#{employeBean.employe.adresse.email}"/>
+                                    </h:panelGroup>
+
+                                <p:outputLabel value="#{msg['urerp.view.employe.boitePostal']}"/>
+                                    <h:panelGroup>
+                                        <p:inputText value="#{employeBean.employe.adresse.boitePostal}"/>
+                                    </h:panelGroup>
+                                </h:panelGrid>   
+                            </p:fieldset>
+
+                            <p:fieldset legend="Fonction à Fermer">
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel value="#{msg['urerp.view.fonction.title']}:"/>
+                                    <p:selectOneMenu value="#{employeBean.periode.fonction.id}">
+                                            <f:selectItems value="#{employeBean.fonctions}" var="fonction"
+                                                           itemLabel="#{fonction}" itemValue="#{fonction.id}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{msg['urerp.view.periode.debut']}"/>
+                                        <h:panelGroup>
+                                            <p:calendar value="#{employeBean.periode.dateDebut}" locale="fr">
+                                            </p:calendar>
+                                        </h:panelGroup> 
+
+                                    <p:outputLabel value="#{msg['urerp.view.periode.fin']}"/>
+                                        <h:panelGroup>
+                                            <p:calendar value="#{employeBean.periode.dateFin}" locale="fr">
+                                            </p:calendar>
+                                        </h:panelGroup> 
+                                </h:panelGrid>
+                            </p:fieldset>
+                        
+                            <p:fieldset legend="Nouvelle Fonction">
+                                <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel value="#{msg['urerp.view.fonction.title']}:"/>
+                                <p:selectOneMenu value="#{employeBean.nouvellePeriode.fonction.id}">
+                                        <f:selectItems value="#{employeBean.fonctions}" var="fonction"
+                                                       itemLabel="#{fonction}" itemValue="#{fonction.id}"/>
+                                 </p:selectOneMenu>
+
+                                <p:outputLabel value="#{msg['urerp.view.periode.debut']}"/>
+                                    <h:panelGroup>
+                                        <p:calendar value="#{employeBean.nouvellePeriode.dateDebut}" locale="fr">
+                                        </p:calendar>
+                                    </h:panelGroup> 
+                                 </h:panelGrid>
+                                <h:inputHidden id="id_employe" value="#{employeBean.employe.id}"/>
+                                <h:inputHidden id="id_periode" value="#{employeBean.periode.id}"/>
+                            </p:fieldset>
+
+                        <p:fieldset legend="Action">
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Liste" action="#{employeBean.doList}" ajax="false" immediate="true"/>
+                                <p:commandButton value="Modifier" action="#{employeBean.doModification}" ajax="false"/>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </h:panelGrid>
+                </h:form>
+          </ui:define>
+    </ui:composition>
+</html>

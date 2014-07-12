@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du stock : Liste des ventes
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="venteList">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:dataTable id="dataTable" var="fonction" value="#{venteListBean.allVentes}"
+                                 rowKey="#{vente.id}" selection="#{venteListBean.vente}" selectionMode="single"
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                        <f:facet name="header">  
+                            Liste des ventes 
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":venteList:show_url, :venteList:edit_url"/>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.vente.numero']}" />  
+                            </f:facet>
+                            <h:outputText value="#{venteBean.vente.numero}" /> 
+                        </p:column>
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.vente.date']}" />  
+                            </f:facet>
+                            <h:outputText value="#{venteBean.vente.dateOperation}" /> 
+                        </p:column>
+                    </p:dataTable>
+
+                </h:panelGrid>
+
+                <p:fieldset legend="Action">
+                    <h:panelGrid columns="5" cellpadding="5">
+                        <p:commandButton value="New" action="#{venteBean.doNew()}" ajax="false" /> 
+
+                        <p:button disabled="#{venteListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{venteListBean.editUrl}"> 
+                            <f:param name="q" value="#{venteListBean.vente.id}"/>
+                        </p:button>
+
+                        <p:button disabled="#{venteListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{venteListBean.showUrl}" > 
+                            <f:param name="q" value="#{venteListBean.vente.id}"/>
+                        </p:button>
+                    </h:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

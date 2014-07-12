@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+           <ui:composition template="./../index.xhtml">
+                <ui:define name="title">
+                    Ressources Humaines -  Affichage de l'emloyé  : #{employeBean.employe.nom}
+                </ui:define>
+               <ui:define name="content">
+                   
+                <f:metadata>
+                    <f:viewParam name="q" value="#{employeBean.employeId}"/>
+               </f:metadata>
+                <h:form id="employeShow">
+                    <h:panelGrid columns="1" cellpadding="5" style="width: 100%">  
+                    <p:fieldset legend="Information sur l'employé">
+                            <p:panelGrid columns="6" style="width: 100%">
+                                    <p:outputLabel value="#{msg['urerp.view.employe.cni']}"/>
+                                        <h:outputText id="employé" value="#{employeBean.employe.cni}"/>
+
+                                    <p:outputLabel value="#{msg['urerp.view.employe.nom']}"/>
+                                        <h:outputText value="#{employeBean.employe.nom}"/>
+
+                                    <p:outputLabel value="#{msg['urerp.view.employe.prenom']}"/>
+                                        <h:outputText value="#{employeBean.employe.prenom}" />
+
+                                    <p:outputLabel value="#{msg['urerp.view.employe.telephone']}"/>
+                                        <h:outputText value="#{employeBean.employe.adresse.telephone}"/>
+
+                                    <p:outputLabel value="#{msg['urerp.view.employe.email']}"/>
+                                        <h:outputText value="#{employeBean.employe.adresse.email}"/>
+
+                                    <p:outputLabel value="#{msg['urerp.view.employe.boitePostal']}"/>
+                                        <h:outputText value="#{employeBean.employe.adresse.boitePostal}"/>
+                            </p:panelGrid>
+                    </p:fieldset> 
+                    
+                    <p:dataTable id="dataTable" var="periode" value="#{employeBean.periodes}"
+                                 rows="10" 
+                                 >  
+                        <f:facet name="header">  
+                            Historique des fonctions de l'employé
+                        </f:facet>  
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="Fonction" />  
+                            </f:facet>  
+                            <h:outputText value="#{periode.fonction}" /> 
+                        </p:column>
+
+                        <p:column>  
+                           <f:facet name="header">  
+                                <h:outputText value="Debut" />  
+                            </f:facet>  
+                            <h:outputText value="#{periode.dateDebut}" > 
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>   
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">  
+                                <h:outputText value="Fin" />  
+                            </f:facet>  
+                            <h:outputText value="#{periode.dateFin}" > 
+                             <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>  
+                        </p:column>
+                    </p:dataTable> 
+                    
+                    <p:fieldset legend="Action">
+                            <h:panelGrid columns="3" cellpadding="5">  
+                                  <p:commandButton value="Liste" action="#{employeBean.doList()}" ajax="false"/>
+                                      <p:button value="Edit" id="edit_url" outcome="#{employeListBean.editUrl}"> 
+                                          <f:param name="q" value="#{employeBean.employe.id}"/>
+                                      </p:button>
+                                   <p:button  value="Modifier la fonction" id="modification_url" outcome="#{employeListBean.modificationUrl}" > 
+                                       <f:param name="q" value="#{employeBean.employe.id}"/>
+                                  </p:button>
+                         </h:panelGrid> 
+                    </p:fieldset>
+                </h:panelGrid> 
+            </h:form>
+          </ui:define>
+           </ui:composition>
+</html>

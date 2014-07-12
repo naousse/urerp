@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Gestion du Stock : Modification du Paiement  #{paiementBean.paiement.numero}
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="achatEdit">
+                <f:metadata>
+                    <f:viewParam name="q" value="#{paiementBean.paiementId}"/>
+                </f:metadata>
+
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                    <p:fieldset legend="Informations sur le paiement">
+                        <h:panelGrid columns="4" cellpadding="10">
+                            <p:outputLabel value="#{msg['urerp.view.paiement.date']}"/>
+                            <h:panelGroup>
+                                <p:calendar value="#{achatBean.paiement.dateOperation}" locale="fr">
+                                </p:calendar>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.paiement.montant']}"/>
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{achatBean.paiement.montant}"
+                                             required="true"  requiredMessage="Le montant est obligatoire"/>
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>
+
+                <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                    <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{achatBean.achat.ligneOperations}"
+                                 rowKey="#{ligneOperation.id}" selection="#{achatBean.ligneOperation}" selectionMode="single"
+                                 paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                        <f:facet name="header">  
+                            Liste des produits à commander 
+                        </f:facet>
+                        <p:ajax event="rowSelect" update=":achatEdit:edit_url"/>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                            </f:facet>
+                            <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                            </f:facet>
+                            <h:outputText value="#{ligneOperation.quantite}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />  
+                            </f:facet>
+                            <h:outputText value="#{ligneOperation.prixU}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.ligneOperation.prixTotal']}" />  
+                            </f:facet>
+                            <h:outputText value="#{ligneOperation.prixU*ligneOperation.quantite}" /> 
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+
+                <p:fieldset legend="Action">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:commandButton value="Liste" action="#{achatBean.doList}" ajax="false" immediate="true"/>
+                        <p:button disabled="#{achatListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{achatListBean.editUrl}"> 
+                            <f:param name="q" value="#{achatListBean.achat.id}"/>
+                        </p:button>
+                        <p:commandButton value="Modifier" action="#{achatBean.doUpdate()}" ajax="false" immediate="true"/>                    
+                    </h:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

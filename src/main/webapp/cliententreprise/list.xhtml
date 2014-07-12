@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Liste des Clients
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="entrepriseList">
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:dataTable id="dataTable" paginatorPosition="bottom" var="entreprise" value="#{cEntrepriseListBean.allCEntreprise}"
+                                 rowKey="#{entreprise.id}" selection="#{cEntrepriseListBean.clientEntreprise}" selectionMode="single"
+                                 paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >
+                        <f:facet name="header">  
+                            Liste des clients entreprises
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" update=":entrepriseList:show_url, :entrepriseList:edit_url"/>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientEntreprise.nom']}" />  
+                            </f:facet>
+                            <h:outputText value="#{entreprise.nom}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientEntreprise.telephone']}" />  
+                            </f:facet>
+                            <h:outputText value="#{entreprise.adresse.telephone}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientEntreprise.email']}" />  
+                            </f:facet>
+                            <h:outputText value="#{entreprise.adresse.email}" /> 
+                        </p:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msg['urerp.view.clientEntreprise.boitePostal']}" />  
+                            </f:facet>
+                            <h:outputText value="#{entreprise.adresse.boitePostal}" /> 
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:commandButton value="New" action="#{cEntrepriseBean.doNew()}" ajax="false" />
+                            <p:button disabled="#{cEntrepriseListBean.butonDisabled}" value="Edit" id="edit_url" outcome="#{cEntrepriseListBean.editUrl}"> 
+                                <f:param name="q" value="#{cEntrepriseListBean.clientEntreprise.id}"/>
+                            </p:button>
+                            <p:button disabled="#{cEntrepriseListBean.butonDisabled}" value="Show" id="show_url" outcome="#{cEntrepriseListBean.showUrl}" > 
+                                <f:param name="q" value="#{cEntrepriseListBean.clientEntreprise.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

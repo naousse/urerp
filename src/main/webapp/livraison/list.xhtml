@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Comptabilite : Liste des livraisons
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="livraisonList">  
+                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+                    <p:dataTable id="dataTable" var="livraison" value="#{livraisonListBean.allLivraisons}"
+                                 rowKey="#{livraison.id}" selection="#{livraisonListBean.livraison}" selectionMode="single"
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                 {RowsPerPageDropdown}"
+                                 >  
+                        <f:facet name="header">  
+                            Liste des livraisons 
+                        </f:facet>  
+
+                        <p:ajax event="rowSelect" update=":livraisonList:show_url, :livraisonList:edit_url"
+                                />
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="Titre" />  
+                            </f:facet>  
+                            <h:outputText value="#{livraison.numero}" />  
+                        </p:column>  
+                        
+                    </p:dataTable>  
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="5" cellpadding="5">
+                            <p:commandButton value="New" action="#{livraisonBean.doNew}" ajax="false" /> 
+
+                            <p:button disabled="#{livraisonListBean.buttonDisabled}" value="Edit" id="edit_url" outcome="#{livraisonListBean.editUrl}"> 
+                                <f:param name="q" value="#{livraisonListBean.livraison.id}"/>
+                            </p:button>
+                            <p:button disabled="#{livraisonListBean.buttonDisabled}" value="Show" id="show_url" outcome="#{livraisonListBean.showUrl}" > 
+                                <f:param name="q" value="#{livraisonListBean.livraison.id}"/>
+                            </p:button>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:panelGrid>    
+            </h:form>
+        </ui:define>
+    </ui:composition>  
+
+</html>
+

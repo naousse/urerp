@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="./../index.xhtml">
+        <ui:define name="title">
+            Ressources Humaines : Nouveau Fournisseur
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="formList">
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+                    <p:fieldset legend="Identité du fournisseur">
+                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                            
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.code']}:"/>
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{fournisseurBean.fournisseur.code}"
+                                             required="true"  requiredMessage="Le code est obligatoire" validator="codeFournisseurValidator"/>
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.nom']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{fournisseurBean.fournisseur.nom}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.pays']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{fournisseurBean.fournisseur.pays}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.telephone']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{fournisseurBean.fournisseur.adresse.telephone}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.email']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{fournisseurBean.fournisseur.adresse.email}"/>
+                            </h:panelGroup>
+                            
+                            <p:outputLabel value="#{msg['urerp.view.fournisseur.boitePostal']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{fournisseurBean.fournisseur.adresse.boitePostal}"/>
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="3" cellpadding="5">  
+                            <p:commandButton value="Liste" action="#{fournisseurBean.doList()}" ajax="false" immediate="true"/>
+                            <p:commandButton value="Enregistrer" action="#{fournisseurBean.doCreate()}" ajax="false"/>
+                        </h:panelGrid> 
+                    </p:fieldset>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
