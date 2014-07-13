@@ -1,4 +1,4 @@
 urerp
 =====
 
- A Free Management System
+Free Information System Management Program
