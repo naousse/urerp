@@ -236,4 +236,5 @@ public class VenteBean implements Serializable{
     public void findClientEntreprise(ActionEvent actionEvent) {
         this.clientEntreprise = iCEntrepriseEJBMetierLocal.findByName(this.clientEntreprise.getNom());
     }
+    
 }

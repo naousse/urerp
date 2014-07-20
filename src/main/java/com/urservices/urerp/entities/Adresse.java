@@ -56,7 +56,4 @@ public class Adresse implements Serializable {
     public void setBoitePostal(String boitePostal) {
         this.boitePostal = boitePostal;
     }
-    
-    
-    
 }

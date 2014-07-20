@@ -256,10 +256,6 @@ public class AchatBean implements Serializable{
         return quantite;
     }
     
-    
-    
-    /*Cette méthode permet de créer un achat
-     * en invoquant l'EJB sans état correspondant*/
     public void findFournisseur(ActionEvent actionEvent) {
         System.out.println("Debut Recherche");
         System.out.println(this.fournisseur.getCode());
