@@ -34,7 +34,7 @@ public class VenteBean implements Serializable{
     
     private Vente vente;
     private List<Vente> ventes;
-    private Long venteId;
+    private static Long venteId;
     private Produit produit;
     private List<Produit> produits;
     private CPhysique clientPhysique;
@@ -63,12 +63,10 @@ public class VenteBean implements Serializable{
         vente = new Vente();
         ventes = new ArrayList<Vente>();
         produit = new Produit();
-        produits = new ArrayList<Produit>();
         clientEntreprise = new CEntreprise();
-        clientEntreprises = new ArrayList<CEntreprise>();
         clientPhysique = new CPhysique();
-        clientPhysiques = new ArrayList<CPhysique>();
         ligneOperation = new LigneOperation();
+        ligneOperations = new ArrayList<LigneOperation>();
     }
 
     public Long getVenteId() {
@@ -190,9 +188,11 @@ public class VenteBean implements Serializable{
     }
     
     public String doCreate() throws IOException {
-        iVenteEJBMetierLocal.create(vente);
+        System.out.println(this.clientPhysique.getId()+"docreate");
+        iVenteEJBMetierLocal.createCP(vente, clientPhysique, ligneOperations);
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Enregistrement avec succès", "Enregistrement avec succès"));
-        context.getExternalContext().redirect("show?q=" + vente.getId());
+        context.getExternalContext().redirect("show.xhtml?q=" + vente.getId());
+        ligneOperations = null;
         return "show";
     }
     
@@ -236,5 +236,5 @@ public class VenteBean implements Serializable{
     public void findClientEntreprise(ActionEvent actionEvent) {
         this.clientEntreprise = iCEntrepriseEJBMetierLocal.findByName(this.clientEntreprise.getNom());
     }
-    
+
 }

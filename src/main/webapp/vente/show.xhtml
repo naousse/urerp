@@ -13,21 +13,23 @@ and open the template in the editor.
 
     <ui:composition template="./../index.xhtml">
         <ui:define name="title">
-            Gestion du stock -  Affichage du produit  : #{venteBean.vente.id}
+            Gestion du stock -  Affichage de la vente : #{venteBean.vente.numero}
         </ui:define>
         <ui:define name="content">
             <f:metadata>
                 <f:viewParam name="q" value="#{venteBean.venteId}"/>
             </f:metadata>
-            <h:form id="show">
+            <h:form id="venteShow">
                 <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
-                    <p:fieldset legend="Information sur le produit">
-                        <p:panelGrid columns="4" style="width: 100%">
+                    <p:fieldset legend="Information sur la vente">
+                        <p:panelGrid columns="6" style="width: 100%">
                             <p:outputLabel value="#{msg['urerp.view.vente.numero']}"/>
-                            <h:outputText id="produit" value="#{venteBean.vente.numero}"/>
+                            <h:outputText id="numeroVente" value="#{venteBean.vente.numero}"/>
 
                             <p:outputLabel value="#{msg['urerp.view.vente.date']}"/>
-                            <h:outputText id="produit" value="#{venteBean.vente.dateOperation}"/>
+                            <h:outputText id="dateVente" value="#{venteBean.vente.dateOperation}">
+                                <f:convertDateTime pattern="jj/mm/yyyy" />
+                            </h:outputText>
                         </p:panelGrid>
                     </p:fieldset>
 

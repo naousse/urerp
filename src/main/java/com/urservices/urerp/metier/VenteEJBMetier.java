@@ -4,6 +4,9 @@
  */
 package com.urservices.urerp.metier;
 
+import com.urservices.urerp.dao.ICEntrepriseEJBDaoLocal;
+import com.urservices.urerp.dao.ICPhysiqueEJBDaoLocal;
+import com.urservices.urerp.dao.ILigneOperationEJBDaoLocal;
 import com.urservices.urerp.dao.IVenteEJBDaoLocal;
 import com.urservices.urerp.entities.CEntreprise;
 import com.urservices.urerp.entities.CPhysique;
@@ -25,6 +28,15 @@ public class VenteEJBMetier implements IVenteEJBMetierLocal, IVenteEJBMetierRemo
     @EJB
     private IVenteEJBDaoLocal iVenteEJBDaoLocal;
 
+    @EJB
+    private ICPhysiqueEJBDaoLocal iCPhysiqueEJBDaoLocal;
+    
+    @EJB
+    private ILigneOperationEJBDaoLocal iLigneOperationEJBDaoLocal;
+    
+    @EJB
+    private ICEntrepriseEJBDaoLocal iCEntrepriseEJBDaoLocal;
+    
     @Override
     public Vente create(Vente vente) {
         return iVenteEJBDaoLocal.create(vente);
@@ -52,7 +64,19 @@ public class VenteEJBMetier implements IVenteEJBMetierLocal, IVenteEJBMetierRemo
 
     @Override
     public Vente createCP(Vente vente, CPhysique physique, List<LigneOperation> ligneOperations) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CPhysique cPhysiqueTempo = iCPhysiqueEJBDaoLocal.findClientPhysiqueByCni(physique.getCni());
+        
+        if (cPhysiqueTempo == null){
+            cPhysiqueTempo = iCPhysiqueEJBDaoLocal.create(physique);
+        }
+        vente.setPartenaire(cPhysiqueTempo);
+        iVenteEJBDaoLocal.create(vente);
+        for (LigneOperation ligneOperation : ligneOperations){
+            ligneOperation.setId(null);
+            ligneOperation.setOperation(vente);
+            iLigneOperationEJBDaoLocal.create(ligneOperation);
+        }
+        return vente;
     }
 
     @Override

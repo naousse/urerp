@@ -17,32 +17,37 @@ and open the template in the editor.
         <ui:define name="content">
             <h:form id="venteNew">
                 <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
-                    <p:fieldset legend="Information sur la vente">
-                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+
+                    <p:fieldset legend="Informations sur la vente">
+                        <h:panelGrid columns='4' cellpadding="2" style="width: 100%">
+
                             <p:outputLabel value="#{msg['urerp.view.vente.numero']}:"/>
                             <h:panelGroup>
-                                <p:inputText id="titre" value="#{venteBean.vente.id}"
-                                             required="true"  requiredMessage="Cette valeur est requise"/>
+                                <p:inputText id="titre" value="#{venteBean.vente.numero}"
+                                             required="true"  requiredMessage="Le numéro est obligatoire" />
                                 <p:message for="titre"/>
                             </h:panelGroup>
-                            <p:outputLabel  value="#{msg['urerp.view.vente.date']}:"/>
-                            <p:calendar value="#{venteBean.vente.dateOperation}"
-                                        required="true"  requiredMessage="La date est obligatoire" locale="fr">
-                            </p:calendar>
 
+                            <p:outputLabel value="#{msg['urerp.view.vente.date']}:"/>
+                            <h:panelGroup>
+                                <p:calendar value="#{venteBean.vente.dateOperation}" locale="fr">
+                                </p:calendar>
+                            </h:panelGroup>
                         </h:panelGrid>
                     </p:fieldset>
 
                     <p:fieldset legend="Information sur le client">
-                        <h:panelGrid columns='3' cellpadding="10" >
-                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
-                            <h:panelGroup style="margin-left: 5%">
-                                <p:inputText  value="#{venteBean.clientPhysique.cni}" id="cni"
-                                              required="true"  requiredMessage="La CNI est obligatoire" />
-                                <p:message for="cni"/>
-                            </h:panelGroup>
-                            <p:commandButton value="Search" id="search" process="cni" ajax="false" actionListener="#{venteBean.findClientPhysique}" update=":venteNew:clientPhysique" />
-                        </h:panelGrid>
+                        <h:form id="searchFormVente">
+                            <h:panelGrid columns='3' cellpadding="10" id="searchDataVente">
+                                <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
+                                <h:panelGroup style="margin-left: 5%">
+                                    <p:inputText  value="#{venteBean.clientPhysique.cni}" id="cni"
+                                                  required="true"  requiredMessage="La CNI est obligatoire" />
+                                    <p:message for="cni"/>
+                                </h:panelGroup>
+                                <p:commandButton value="Search" id="search" process=":venteNew:searchFormVente" ajax="false" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":venteNew:clientPhysique, searchDataVente" />
+                            </h:panelGrid>
+                        </h:form>
                         <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="clientPhysique">
                             <p:outputLabel value="#{msg['urerp.view.clientPhysique.nom']}:"/>
                             <h:panelGroup>
@@ -68,8 +73,8 @@ and open the template in the editor.
                     </p:fieldset>
 
                     <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
-                        <p:dataTable id="dataTable" paginatorPosition="bottom" var="vente" value="#{venteBean.ligneOperations}"
-                                     rowKey="#{vente.id}" selection="#{venteBean.vente}" selectionMode="single"
+                        <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{venteBean.ligneOperations}"
+                                     rowKey="#{ligneOperation.id}" selection="#{venteBean.ligneOperation}" selectionMode="single"
                                      paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
                                      {RowsPerPageDropdown}"
@@ -81,14 +86,14 @@ and open the template in the editor.
                                 <f:facet name="header">  
                                     <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
                                 </f:facet>
-                                <h:outputText value="#{vente.produit.designation}" /> 
+                                <h:outputText value="#{ligneOperation.produit.designation}" /> 
                             </p:column>
 
                             <p:column>  
                                 <f:facet name="header">  
                                     <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
                                 </f:facet>
-                                <h:outputText value="#{vente.quantite}" /> 
+                                <h:outputText value="#{ligneOperation.quantite}" /> 
                             </p:column>
                         </p:dataTable>
                     </h:panelGrid>
