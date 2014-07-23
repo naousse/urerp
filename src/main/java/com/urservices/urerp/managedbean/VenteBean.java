@@ -230,7 +230,10 @@ public class VenteBean implements Serializable{
     }
     
     public void findClientPhysique(ActionEvent actionEvent) {
+        System.out.println("Debut Recherche");
         this.clientPhysique = iCPhysiqueEJBMetierLocal.findClientPhysiqueByCni(this.clientPhysique.getCni());
+        System.out.println(this.clientPhysique.getId());
+        System.out.println("Fin Recherche");
     }
     
     public void findClientEntreprise(ActionEvent actionEvent) {
