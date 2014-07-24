@@ -43,8 +43,13 @@ public class VenteBean implements Serializable{
     private List<CEntreprise> clientEntreprises;
     private LigneOperation ligneOperation;
     private static List<LigneOperation> ligneOperations = new ArrayList<LigneOperation>();
+    
+    //Information pour l'ajout d'un produit
+    private long idProduitAAjouter;
+    private String nomProduitAAjouter = "";
     private int quantite = 0;
     private float prixUnitaire = 0f;
+    //Fin Information pour l'ajout d'un produit
     
     private FacesContext context = FacesContext.getCurrentInstance();
     
@@ -116,6 +121,15 @@ public class VenteBean implements Serializable{
     public float getPrixUnitaire() {
         return prixUnitaire;
     }
+
+    public String getNomProduitAAjouter() {
+        System.out.println("ici"+nomProduitAAjouter);
+        return nomProduitAAjouter;
+    }
+
+    public void setNomProduitAAjouter(String nomProduitAAjouter) {
+        this.nomProduitAAjouter = nomProduitAAjouter;
+    }
     
     public void setVenteId(Long venteId) {
         this.venteId = venteId;
@@ -147,7 +161,10 @@ public class VenteBean implements Serializable{
     }
 
     public void setProduit(Produit produit) {
+        System.out.println("Selection du Produit");
         this.produit = produit;
+        this.idProduitAAjouter = this.produit.getId();
+        this.setNomProduitAAjouter(this.produit.getDesignation());
     }
 
     public void setProduits(List<Produit> produits) {
@@ -166,8 +183,8 @@ public class VenteBean implements Serializable{
         this.prixUnitaire = prixUnitaire;
     }
     
-    public void setLigneOperations(List<LigneOperation> ligneOperations) {
-        ligneOperations = ligneOperations;
+    public void setLigneOperations(List<LigneOperation> liOperations) {
+        ligneOperations = liOperations;
     }
 
     public List<LigneOperation> getLigneOperations() {
@@ -179,19 +196,22 @@ public class VenteBean implements Serializable{
     }
     
     public void addProduct(ActionEvent actionEvent) {
+        System.out.println("Debut ajout produit");
         ligneOperation = new LigneOperation();
         ligneOperation.setProduit(produit);
         ligneOperation.setQuantite(quantite);
         ligneOperation.setPrixU(prixUnitaire);
         ligneOperation.setId(Long.valueOf(ligneOperations.size()+1));
         ligneOperations.add(ligneOperation);
+        System.out.println("Fin Ajout Produit");
     }
     
     public String doCreate() throws IOException {
         System.out.println(this.clientPhysique.getId()+"docreate");
         iVenteEJBMetierLocal.createCP(vente, clientPhysique, ligneOperations);
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Enregistrement avec succès", "Enregistrement avec succès"));
-        context.getExternalContext().redirect("show.xhtml?q=" + vente.getId());
+        FacesContext newContext = FacesContext.getCurrentInstance();
+        newContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Enregistrement avec succès", "Enregistrement avec succès"));
+        newContext.getExternalContext().redirect("show.xhtml?q=" + vente.getId());
         ligneOperations = null;
         return "show";
     }
@@ -231,6 +251,7 @@ public class VenteBean implements Serializable{
     
     public void findClientPhysique(ActionEvent actionEvent) {
         System.out.println("Debut Recherche");
+        System.out.println("CNI: "+this.clientPhysique.getCni());
         this.clientPhysique = iCPhysiqueEJBMetierLocal.findClientPhysiqueByCni(this.clientPhysique.getCni());
         System.out.println(this.clientPhysique.getId());
         System.out.println("Fin Recherche");

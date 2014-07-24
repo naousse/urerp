@@ -10,6 +10,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.validation.constraints.NotNull;
 /**
  *
  * @author samuel
@@ -42,6 +43,7 @@ public class CPhysique extends Partenaire implements Serializable{
         this.prenom = prenom;
     }
 
+    @NotNull(message = "{urerp.entity.required}")
     public String getCni() {
         return cni;
     }
@@ -51,6 +53,8 @@ public class CPhysique extends Partenaire implements Serializable{
         return super.getNom(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
+    @NotNull(message = "{urerp.entity.required}")
     public String getPrenom() {
         return prenom;
     }

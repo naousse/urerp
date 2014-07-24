@@ -72,7 +72,7 @@ public class Produit implements Serializable {
         return reference;
     }
 
-    @NotNull(message = "{urerp.entity.required}")
+   // @NotNull(message = "{urerp.entity.required}")
     @Size(min = 1, max = 100, message = "{urerp.entity.size}")
     public String getDesignation() {
         return designation;

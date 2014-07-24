@@ -15,19 +15,25 @@ and open the template in the editor.
             Gestion du stock : Nouvelle vente
         </ui:define>
         <ui:define name="content">
+           <!--Formulaire de vente globale -->
+            
             <h:form id="venteNew">
+                
+                <!--Panel Grid globale -->
                 <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
 
+                    <!-- Zone d'information sur la vente -->
                     <p:fieldset legend="Informations sur la vente">
+                        <!--Panel grid contenant la liste des informations sur la vente -->
                         <h:panelGrid columns='4' cellpadding="2" style="width: 100%">
-
+                            <!--label et zone de texte pour le numéro de la vente -->
                             <p:outputLabel value="#{msg['urerp.view.vente.numero']}:"/>
                             <h:panelGroup>
                                 <p:inputText id="titre" value="#{venteBean.vente.numero}"
                                              required="true"  requiredMessage="Le numéro est obligatoire" />
                                 <p:message for="titre"/>
                             </h:panelGroup>
-
+                            <!--Label et calendrier pour la date de la vente -->
                             <p:outputLabel value="#{msg['urerp.view.vente.date']}:"/>
                             <h:panelGroup>
                                 <p:calendar value="#{venteBean.vente.dateOperation}" locale="fr">
@@ -36,8 +42,9 @@ and open the template in the editor.
                         </h:panelGrid>
                     </p:fieldset>
 
+                    <!-- Zone d'information sur le client -->
                     <p:fieldset legend="Information sur le client">
-                        <h:form id="searchFormVente">
+                        
                             <h:panelGrid columns='3' cellpadding="10" id="searchDataVente">
                                 <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
                                 <h:panelGroup style="margin-left: 5%">
@@ -45,9 +52,9 @@ and open the template in the editor.
                                                   required="true"  requiredMessage="La CNI est obligatoire" />
                                     <p:message for="cni"/>
                                 </h:panelGroup>
-                                <p:commandButton value="Search" id="search" process=":venteNew:searchFormVente" ajax="false" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":venteNew:clientPhysique, searchDataVente" />
+                                <p:commandButton value="Search" id="search" process=":venteNew:searchDataVente" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":venteNew:clientPhysique" />
                             </h:panelGrid>
-                        </h:form>
+                        
                         <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="clientPhysique">
                             <p:outputLabel value="#{msg['urerp.view.clientPhysique.nom']}:"/>
                             <h:panelGroup>
@@ -72,6 +79,7 @@ and open the template in the editor.
                         </h:panelGrid>
                     </p:fieldset>
 
+                    <!-- Zone d'information sur la liste des produits commandés -->
                     <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
                         <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{venteBean.ligneOperations}"
                                      rowKey="#{ligneOperation.id}" selection="#{venteBean.ligneOperation}" selectionMode="single"
@@ -101,13 +109,15 @@ and open the template in the editor.
                     <p:fieldset legend="Action">
                         <h:panelGrid columns="3" cellpadding="5">  
                             <p:commandButton value="Liste" action="#{venteBean.doList()}" ajax="false" immediate="true"/>
-                            <p:commandButton value="Ajouter" onclick="editorDialogVente.show();"/>
+                            <p:commandButton value="Ajouter" immediate="true" onclick="editorDialogVente.show();"/>
                             <p:commandButton value="Enregistrer" action="#{venteBean.doCreate}" ajax="false"/>
                         </h:panelGrid> 
                     </p:fieldset>
 
-                    <p:dialog widgetVar="editorDialogVente" width="70%" header="Produits en stock" >
+                    <!-- Boite de dialogue pour l'ajout d'un produit commandé -->
+                    <p:dialog widgetVar="editorDialogVente" width="70%" header="Produits en stock" id="addProduct">
 
+                        <!-- Liste des produits en stock -->
                         <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
                             <p:dataTable id="produitTable" paginatorPosition="bottom" var="produit" value="#{venteBean.allProduits}"
                                          rowKey="#{produit.id}" selection="#{venteBean.produit}" selectionMode="single"
@@ -134,12 +144,13 @@ and open the template in the editor.
                                 </p:column>
                             </p:dataTable>
 
+                            <!-- Produit selectionné -->
                             <p:fieldset legend="Informations Produits">
-                                
-                                <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="selectProduct">
+
+                                <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="selectProduct" >
                                     <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
                                     <h:panelGroup>
-                                        <p:inputText value="#{venteBean.produit.designation}"  id="designationProduit" />
+                                        <p:inputText value="#{venteBean.produit.designation}"  id="nomProduit" />
                                     </h:panelGroup>
                                     <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
                                     <h:panelGroup>
@@ -153,8 +164,8 @@ and open the template in the editor.
                             </p:fieldset>
                             <p:fieldset legend="Action">
                                 <h:panelGrid columns="3" cellpadding="5">  
-                                    <p:commandButton value="Enregistrer" id="save" actionListener="#{venteBean.addProduct(actionEvent)}" update=":venteNew:dataTable"/>
-                                    <p:commandButton value="Annuler"  onclick="editorDialogVente.hide();"/>
+                                    <p:commandButton value="Enregistrer" id="save" process=":venteNew:addProduct" actionListener="#{venteBean.addProduct(actionEvent)}" update=":venteNew:dataTable"/>
+                                    <p:commandButton value="Annuler" immediate="true"  onclick="editorDialogVente.hide();"/>
                                 </h:panelGrid> 
                             </p:fieldset>  
                         </h:panelGrid>   

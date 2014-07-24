@@ -1,1 +1,7 @@
  - Ajout de la branche samy_dev
+-Correction de la vue liste des vente: La variable de parcours des données du tableau n'était pas correct
+
+-Correction des problèmes liées l'ajout des produits commandés: Ajout de la propriété immedite=true
+ dans le boutton d'ouverure de la boite de dialogue et de fermeture de la boite de dialogue, également en soumettant le formulaire lors de la demande d'ajout d'un produit
+
+-Correction de la vue nouvelle vente: Boutton search dans un actionlistener ne pas placer la propriété ajax à false

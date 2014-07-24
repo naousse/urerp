@@ -61,8 +61,10 @@ public class CPhysiqueEJBDao implements ICPhysiqueEJBDaoLocal, ICPhysiqueEJBDaoR
 
     @Override
     public CPhysique findClientPhysiqueByCni(String cni) {
+        System.out.println("dao"+cni);
         Query query = em.createNamedQuery("CPhysique.findClientPhysiqueByCni").setParameter("cni", cni);
         int totalResultat = ((List<CPhysique>)query.getResultList()).size();
+        System.out.println(totalResultat);
         if (totalResultat == 1) {
             return (CPhysique)query.getSingleResult();
         }
