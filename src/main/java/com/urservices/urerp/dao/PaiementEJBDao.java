@@ -60,10 +60,11 @@ public class PaiementEJBDao implements IPaiementEJBDaoLocal, IPaiementEJBDaoRemo
         return (List<Paiement>)query.getResultList();
     }
 
+   
+
     @Override
-    public List<Paiement> findAllPaiementsAchat(Long id) {
-        Query query = em.createNamedQuery(Paiement.FIND_ALLPaiementsAchat);
-        query.setParameter("id", id);
-        return (List<Paiement>)query.getResultList();
-    }
+    public List<Paiement> findAllPaiementsOperation(Operation operation) {
+        Query query = em.createNamedQuery(Paiement.FIND_ALL_PAIEMENTS_OPERATION);
+        query.setParameter("operation", operation);
+        return (List<Paiement>)query.getResultList();}
 }

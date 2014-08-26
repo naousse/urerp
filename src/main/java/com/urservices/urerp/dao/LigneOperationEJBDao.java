@@ -5,6 +5,7 @@
 package com.urservices.urerp.dao;
 
 import com.urservices.urerp.entities.LigneOperation;
+import com.urservices.urerp.entities.Operation;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -58,5 +59,19 @@ public class LigneOperationEJBDao implements ILigneOperationEJBDaoLocal, ILigneO
         Query query = em.createNamedQuery("LigneOperation.findAll");
         return (List<LigneOperation>)query.getResultList();
     }
+
+    @Override
+    public List<LigneOperation> findAllLigneOperationsForOneOperation(Operation operation) {
+        Query query = em.createNamedQuery("LigneOperation.findAllLigneOperationsForOneOperation").setParameter("operation", operation);
+        return (List<LigneOperation>)query.getResultList();
+    }
+
+    @Override
+    public Long findMaxIdLigneOperationForAnOperation(Operation operation) {
+        Query query = em.createNamedQuery("LigneOperation.findMaxIdLigneOperationForAnOperation").setParameter("operation", operation);
+        return (Long)query.getSingleResult();
+    }
+
+
 
 }

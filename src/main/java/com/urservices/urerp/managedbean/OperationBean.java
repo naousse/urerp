@@ -4,19 +4,20 @@
  */
 package com.urservices.urerp.managedbean;
 
-import com.urservices.urerp.entities.Achat;
-import com.urservices.urerp.entities.Fournisseur;
+import com.urservices.urerp.entities.CEntreprise;
+import com.urservices.urerp.entities.CPhysique;
 import com.urservices.urerp.entities.LigneOperation;
 import com.urservices.urerp.entities.Livraison;
 import com.urservices.urerp.entities.Paiement;
 import com.urservices.urerp.entities.Produit;
 import com.urservices.urerp.entities.Vente;
-import com.urservices.urerp.metier.IAchatEJBMetierLocal;
-import com.urservices.urerp.metier.IFournisseurEJBMetierLocal;
+import com.urservices.urerp.metier.ICEntrepriseEJBMetierLocal;
+import com.urservices.urerp.metier.ICPhysiqueEJBMetierLocal;
 import com.urservices.urerp.metier.ILigneOperationEJBMetierLocal;
 import com.urservices.urerp.metier.ILivraisonEJBMetierLocal;
 import com.urservices.urerp.metier.IPaiementEJBMetierLocal;
 import com.urservices.urerp.metier.IProduitEJBMetierLocal;
+import com.urservices.urerp.metier.IVenteEJBMetierLocal;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,21 +34,22 @@ import javax.faces.event.ActionEvent;
  *
  * @author samuel
  */
-@ManagedBean(name = "sellBean")
+@ManagedBean(name = "operationBean")
 @ViewScoped
-public class AchatBean implements Serializable {
+public class OperationBean implements Serializable {
 
-    private Achat achat;
+    private Vente vente;
     private List<Vente> ventes;
-    private static Long achatId;
+    private static Long venteId;
     private Produit produit;
     private Paiement paiement;
     private List<Produit> produits;
     private Livraison livraison;
-    private Fournisseur fournisseur;
-    private List<Fournisseur> fournisseurs;    
+    private CPhysique clientPhysique;
+    private List<CPhysique> clientPhysiques;
+    private CEntreprise clientEntreprise;
+    private List<CEntreprise> clientEntreprises;
     private LigneOperation ligneOperation;
-    private Long maxIdLigneOperation;
     private boolean buttonDisabled = true;
     private static List<LigneOperation> ligneOperations = new ArrayList<LigneOperation>();
     private List<Paiement> paiements = new ArrayList<Paiement>();
@@ -61,7 +63,7 @@ public class AchatBean implements Serializable {
 
 
     @EJB
-    private IAchatEJBMetierLocal iAchatEJBMetierLocal;
+    private IVenteEJBMetierLocal iVenteEJBMetierLocal;
     @EJB
     private ILigneOperationEJBMetierLocal iLigneOperationEJBMetierLocal;
     @EJB
@@ -69,50 +71,51 @@ public class AchatBean implements Serializable {
     @EJB
     private IProduitEJBMetierLocal iProduitEJBMetierLocal;
     @EJB
-    private IFournisseurEJBMetierLocal iFournisseurEJBMetierLocal;
+    private ICEntrepriseEJBMetierLocal iCEntrepriseEJBMetierLocal;
+    @EJB
+    private ICPhysiqueEJBMetierLocal iCPhysiqueEJBMetierLocal;
     @EJB
     private IPaiementEJBMetierLocal iPaiementEJBMetierLocal;
 
     /**
      * Creates a new instance of VenteBean
      */
-    public AchatBean() {
-        this.maxIdLigneOperation = 0L;
-        achat = new Achat();
+    public OperationBean() {
+        vente = new Vente();
         ventes = new ArrayList<Vente>();
         produit = new Produit();
-        fournisseur = new Fournisseur();
+        clientEntreprise = new CEntreprise();
+        clientPhysique = new CPhysique();
         ligneOperation = new LigneOperation();
         ligneOperations = new ArrayList<LigneOperation>();
     }
 
-    public Long getAchatId() {
-        return achatId;
+    public Long getVenteId() {
+        return venteId;
     }
 
-   
-    public Achat getAchat() {
-        return achat;
+    public Vente getVente() {
+        return vente;
     }
 
     public List<Vente> getVentes() {
         return ventes;
     }
 
-    public Fournisseur getFournisseur() {
-        return fournisseur;
+    public CEntreprise getClientEntreprise() {
+        return clientEntreprise;
     }
 
-    public List<Fournisseur> getFournisseurs() {
-        return fournisseurs;
+    public List<CEntreprise> getClientEntreprises() {
+        return clientEntreprises;
     }
 
-    public void setFournisseur(Fournisseur fournisseur) {
-        this.fournisseur = fournisseur;
+    public CPhysique getClientPhysique() {
+        return clientPhysique;
     }
 
-    public void setFournisseurs(List<Fournisseur> fournisseurs) {
-        this.fournisseurs = fournisseurs;
+    public List<CPhysique> getClientPhysiques() {
+        return clientPhysiques;
     }
 
     public Produit getProduit() {
@@ -128,8 +131,6 @@ public class AchatBean implements Serializable {
     }
 
     public LigneOperation getLigneOperation() {
-//        if(this.ligneOperation!=null)
-//            System.out.println(this.ligneOperation.getProduit().getDesignation()+" : "+this.ligneOperation.getQuantite());
         return this.ligneOperation;
     }
 
@@ -146,7 +147,7 @@ public class AchatBean implements Serializable {
     }
 
     public List<Livraison> getLivraisons() {
-        return  iLivraisonEJBMetierLocal.findAllLivraisonsOperation(this.achat);
+        return  iLivraisonEJBMetierLocal.findAllLivraisonsOperation(this.vente);
        
     }
 
@@ -184,22 +185,37 @@ public class AchatBean implements Serializable {
         this.buttonDisabled = buttonDisabled;
     }
 
-    public void setAchatId(Long achatId) {
-        AchatBean.achatId = achatId;
-         achat = iAchatEJBMetierLocal.findById(achatId);
-        this.setFournisseur((Fournisseur) achat.getPartenaire());
-        this.setLigneOperations(iLigneOperationEJBMetierLocal.findAllLigneOperationsForOneOperation(achat));
-        this.maxIdLigneOperation = iLigneOperationEJBMetierLocal.findMaxIdLigneOperationForAnOperation(achat);
-        this.setPaiements(iPaiementEJBMetierLocal.findAllPaiementsOperation(achat));
-    
+    public void setVenteId(Long venteId) {
+        OperationBean.venteId = venteId;
+        vente = iVenteEJBMetierLocal.findById(venteId);
+        this.setClientPhysique((CPhysique) vente.getPartenaire());
+        this.setLigneOperations(iLigneOperationEJBMetierLocal.findAllLigneOperationsForOneOperation(vente));
+        this.setPaiements(iPaiementEJBMetierLocal.findAllPaiementsOperation(vente));
     }
-    
 
-    public void setAchat(Achat achat) {
-        this.achat = achat;
+    public void setVente(Vente vente) {
+        this.vente = vente;
     }
-    
-    
+
+    public void setVentes(List<Vente> ventes) {
+        this.ventes = ventes;
+    }
+
+    public void setClientEntreprise(CEntreprise clientEntreprise) {
+        this.clientEntreprise = clientEntreprise;
+    }
+
+    public void setClientEntreprises(List<CEntreprise> clientEntreprises) {
+        this.clientEntreprises = clientEntreprises;
+    }
+
+    public void setClientPhysique(CPhysique clientPhysique) {
+        this.clientPhysique = clientPhysique;
+    }
+
+    public void setClientPhysiques(List<CPhysique> clientPhysiques) {
+        this.clientPhysiques = clientPhysiques;
+    }
 
     public void setProduit(Produit produit) {
         System.out.println("Selection du Produit");
@@ -212,7 +228,6 @@ public class AchatBean implements Serializable {
 
     public void setLigneOperation(LigneOperation ligneOperation) {
         this.ligneOperation = ligneOperation;
-        System.out.println(this.ligneOperation.getProduit().getDesignation()+" : "+this.ligneOperation.getQuantite());
         this.buttonDisabled = false;
     }
 
@@ -235,14 +250,6 @@ public class AchatBean implements Serializable {
         }
         return ligneOperations;
     }
-    
-    public void findFournisseur(ActionEvent actionEvent) {
-        System.out.println("Debut Recherche");
-        System.out.println(this.fournisseur.getCode());
-        this.fournisseur = iFournisseurEJBMetierLocal.findByCode(this.fournisseur.getCode());
-       System.out.println(this.fournisseur.getId());
-       System.out.println("Fin Recherche");
-    }
 
     public void addProduct(ActionEvent actionEvent) {
         System.out.println("Debut ajout produit");
@@ -251,7 +258,7 @@ public class AchatBean implements Serializable {
         ligneOperation.setProduit(produit);
         ligneOperation.setQuantite(quantite);
         ligneOperation.setPrixU(prixUnitaire);
-        ligneOperation.setId(1 + maxIdLigneOperation);
+        ligneOperation.setId(Long.valueOf(ligneOperations.size() + 1));
         ligneOperation.setEtat("new");
         ligneOperations.add(ligneOperation);
         produits.remove(produit);
@@ -266,11 +273,11 @@ public class AchatBean implements Serializable {
     }
 
     public String doCreate() throws IOException {
-        //System.out.println(this.clientPhysique.getId() + "docreate");
-        //iVenteEJBMetierLocal.createCP(vente, clientPhysique, ligneOperations);
+        System.out.println(this.clientPhysique.getId() + "docreate");
+        iVenteEJBMetierLocal.createCP(vente, clientPhysique, ligneOperations);
         FacesContext newContext = FacesContext.getCurrentInstance();
         newContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Enregistrement avec succès", "Enregistrement avec succès"));
-        newContext.getExternalContext().redirect("show.xhtml?q=" + achat.getId());
+        newContext.getExternalContext().redirect("show.xhtml?q=" + vente.getId());
         ligneOperations = null;
         return "show";
     }
@@ -294,11 +301,11 @@ public class AchatBean implements Serializable {
     }
 
     public String doUpdate() throws IOException {
-       // System.out.println(this.clientPhysique.getId() + "doupdate");
-       // iVenteEJBMetierLocal.update(vente, ligneOperations, ligneOperationsToDelete);
+        System.out.println(this.clientPhysique.getId() + "doupdate");
+        iVenteEJBMetierLocal.update(vente, ligneOperations, ligneOperationsToDelete);
         FacesContext newContext = FacesContext.getCurrentInstance();
         newContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Modification avec succès", "Modification avec succès"));
-        newContext.getExternalContext().redirect("edit.xhtml?q=" + achat.getId());
+        newContext.getExternalContext().redirect("edit.xhtml?q=" + vente.getId());
         ligneOperations = null;
         return "edit";
     }
@@ -312,7 +319,7 @@ public class AchatBean implements Serializable {
     }
 
     public void doFind() {
-        achat = iAchatEJBMetierLocal.findById(achatId);
+        vente = iVenteEJBMetierLocal.findById(venteId);
     }
 
     public List<Produit> getAllProduits() {
@@ -328,10 +335,22 @@ public class AchatBean implements Serializable {
         return produits;
     }
 
+    public void findClientPhysique(ActionEvent actionEvent) {
+        System.out.println("Debut Recherche");
+        System.out.println("CNI: " + this.clientPhysique.getCni());
+        this.clientPhysique = iCPhysiqueEJBMetierLocal.findClientPhysiqueByCni(this.clientPhysique.getCni());
+        System.out.println(this.clientPhysique.getId());
+        System.out.println("Fin Recherche");
+    }
+
+    public void findClientEntreprise(ActionEvent actionEvent) {
+        this.clientEntreprise = iCEntrepriseEJBMetierLocal.findByName(this.clientEntreprise.getNom());
+    }
+
     public void editLigneOperation(ActionEvent actionEvent) {
         System.out.println("Debut Modification");
-        int pos = AchatBean.ligneOperations.indexOf(this.ligneOperation);
-        ligneOperations.set(pos, ligneOperation);
+        OperationBean.ligneOperations.remove(this.ligneOperation);
+        ligneOperations.add(ligneOperation);
         this.buttonDisabled = true;
         System.out.println("Fin Modification");
     }
@@ -339,7 +358,7 @@ public class AchatBean implements Serializable {
     public void removeLigneOperation(ActionEvent actionEvent) {
         System.out.println("Debut retrait");
         System.out.println(this.ligneOperation.getProduit().getDesignation());
-        AchatBean.ligneOperations.remove(this.ligneOperation);
+        OperationBean.ligneOperations.remove(this.ligneOperation);
         produits.add(ligneOperation.getProduit());
         this.buttonDisabled = true;
         System.out.println("Fin retrait");
@@ -350,11 +369,11 @@ public class AchatBean implements Serializable {
         System.out.println("Debut delete");
         System.out.println(this.ligneOperation.getProduit().getDesignation());
         if(this.ligneOperation.getEtat().equals("old")){
-         AchatBean.ligneOperationsToDelete.add(this.ligneOperation);
+         OperationBean.ligneOperationsToDelete.add(this.ligneOperation);
         Produit deleteProduit = ligneOperation.getProduit();
         deleteProduit.setQuantiteEnStock(deleteProduit.getQuantiteEnStock() + ligneOperation.getQuantite());
         produits.add(deleteProduit);
-        AchatBean.ligneOperations = construireListeLigneOperation(ligneOperations, this.ligneOperation);
+        OperationBean.ligneOperations = construireListeLigneOperation(ligneOperations, this.ligneOperation);
         this.buttonDisabled = true;
         System.out.println("Fin delete");
         }else{

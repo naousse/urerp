@@ -5,6 +5,7 @@
 package com.urservices.urerp.dao;
 
 import com.urservices.urerp.entities.LigneOperation;
+import com.urservices.urerp.entities.Operation;
 import java.util.List;
 
 /**
@@ -22,5 +23,9 @@ public interface ILigneOperationEJBDao {
     public LigneOperation findById(Long id);
     
     public List<LigneOperation> findAll();
+    
+    public Long findMaxIdLigneOperationForAnOperation(Operation operation);
+    
+     public List<LigneOperation> findAllLigneOperationsForOneOperation(Operation operation);
     
 }

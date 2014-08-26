@@ -6,6 +6,7 @@ package com.urservices.urerp.metier;
 
 import com.urservices.urerp.dao.ILigneOperationEJBDaoLocal;
 import com.urservices.urerp.entities.LigneOperation;
+import com.urservices.urerp.entities.Operation;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
@@ -45,6 +46,16 @@ public class LigneOperationEJBMetier implements ILigneOperationEJBMetierLocal, I
     @Override
     public List<LigneOperation> findAll() {
         return iLigneOperationEJBDaoLocal.findAll();
+    }
+
+    @Override
+    public List<LigneOperation> findAllLigneOperationsForOneOperation(Operation operation) {
+      return iLigneOperationEJBDaoLocal.findAllLigneOperationsForOneOperation(operation);
+    }
+
+    @Override
+    public Long findMaxIdLigneOperationForAnOperation(Operation operation) {
+       return iLigneOperationEJBDaoLocal.findMaxIdLigneOperationForAnOperation(operation);
     }
 
 }

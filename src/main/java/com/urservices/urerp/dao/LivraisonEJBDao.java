@@ -5,6 +5,7 @@
 package com.urservices.urerp.dao;
 
 import com.urservices.urerp.entities.Livraison;
+import com.urservices.urerp.entities.Operation;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -56,6 +57,12 @@ public class LivraisonEJBDao implements ILivraisonEJBDaoLocal, ILivraisonEJBDaoR
     @Override
     public List<Livraison> findAll() {
         Query query = em.createNamedQuery("Livraison.findAll");
+        return (List<Livraison>)query.getResultList();
+    }
+
+    @Override
+    public List<Livraison> findAllLivraisonsOperation(Operation operation) {
+        Query query = em.createNamedQuery("Livraison.findAllLivraisonsOperation").setParameter("operation", operation);
         return (List<Livraison>)query.getResultList();
     }
 

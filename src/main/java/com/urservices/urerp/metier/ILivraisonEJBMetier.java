@@ -6,6 +6,7 @@ package com.urservices.urerp.metier;
 
 import com.urservices.urerp.entities.LigneOperation;
 import com.urservices.urerp.entities.Livraison;
+import com.urservices.urerp.entities.Operation;
 import java.util.List;
 
 /**
@@ -24,6 +25,10 @@ public interface ILivraisonEJBMetier {
     
     public List<Livraison> findAll();
     
+    public Livraison update(Livraison livraison, List<LigneOperation> ligneOperations, List<LigneOperation> ligneOperationsoDelete);
+    
     public Livraison create(Livraison livraison, List<LigneOperation> ligneOperations);
+    
+    public List<Livraison> findAllLivraisonsOperation(Operation operation);
     
 }

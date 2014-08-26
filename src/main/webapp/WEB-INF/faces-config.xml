@@ -27,9 +27,9 @@
                                -->
     <managed-bean>
         <managed-bean-name>achatBean</managed-bean-name>
-        <managed-bean-class>com.urservices.urerp.managedbean.AchatBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
+        <managed-bean-class>com.urservices.urerp.managedbean.AchatBean2</managed-bean-class>
+    
+        <managed-bean-scope>request</managed-bean-scope></managed-bean>
     <lifecycle>
         <phase-listener>com.urservices.urerp.listeners.PageMessages</phase-listener>
     </lifecycle>

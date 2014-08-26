@@ -19,16 +19,207 @@ and open the template in the editor.
                 <f:viewParam name="q" value="#{venteBean.venteId}"/>
             </f:metadata>
 
-            <h:form id="venteList">
-                <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
+             <!--Formulaire de vente globale -->
+            
+            <h:form id="venteEdit">
+                <!--Panel Grid globale -->
+                <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
+
+                    <!-- Zone d'information sur la vente -->
                     <p:fieldset legend="Informations sur la vente">
-
-                        <h:panelGrid columns="4" cellpadding="15">
-
+                        <!--Panel grid contenant la liste des informations sur la vente -->
+                        <h:panelGrid columns='4' cellpadding="2" style="width: 100%" id="dataVente">
+                           
+                            <p:outputLabel value="#{msg['urerp.view.vente.numero']}:"/>
+                            <h:panelGroup>
+                                <p:inputText id="titre" value="#{venteBean.vente.numero}"
+                                             required="true"  requiredMessage="Le numéro est obligatoire" />
+                                <p:message for="titre"/>
+                            </h:panelGroup>
+                           
+                            <p:outputLabel value="#{msg['urerp.view.vente.date']}:"/>
+                            <h:panelGroup>
+                                <p:calendar value="#{venteBean.vente.dateOperation}" locale="fr">
+                                </p:calendar>
+                            </h:panelGroup>
                         </h:panelGrid>
                     </p:fieldset>
+
+                    <!-- Zone d'information sur le client -->
+                    <p:fieldset legend="Information sur le client">
+                        
+                            <h:panelGrid columns='3' cellpadding="10" id="searchDataVente">
+                                <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
+                                <h:panelGroup style="margin-left: 5%">
+                                    <p:inputText  value="#{venteBean.clientPhysique.cni}" id="cni"
+                                                  required="true"  requiredMessage="La CNI est obligatoire" />
+                                    <p:message for="cni"/>
+                                </h:panelGroup>
+                                <p:commandButton value="Search" id="search" process=":venteEdit:searchDataVente" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":venteEdit:clientPhysique" />
+                            </h:panelGrid>
+                        
+                        <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="clientPhysique">
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.nom']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{venteBean.clientPhysique.nom}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.prenom']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{venteBean.clientPhysique.prenom}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.telephone']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{venteBean.clientPhysique.adresse.telephone}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.email']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{venteBean.clientPhysique.adresse.email}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.boitePostal']}:"/>
+                            <h:panelGroup>
+                                <p:inputText value="#{venteBean.clientPhysique.adresse.boitePostal}"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <!-- Zone d'information sur la liste des produits commandés -->
+                    <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                        <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{venteBean.ligneOperations}"
+                                     rowKey="#{ligneOperation.id}" selection="#{venteBean.ligneOperation}" selectionMode="single"
+                                     paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                     {RowsPerPageDropdown}"
+                                     >
+                            <f:facet name="header">  
+                                Liste des produits commandés
+                            </f:facet>
+                            <p:ajax event="rowSelect" update=":venteEdit:edit_dialog,:venteEdit:remove_dialog,:formDialog:ligneOperationToEdit"/>
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                            </p:column>
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.quantite}" /> 
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                    <p:fieldset legend="Action">
+                        <h:panelGrid columns="6" cellpadding="5">  
+                            <p:commandButton value="Liste" action="#{venteBean.doList()}" ajax="false" immediate="true"/>
+                            
+                            <p:commandButton value="Modifier" action="#{venteBean.doUpdate()}" ajax="false"/>
+                            <p:commandButton value="Ajouter des produits" immediate="true" onclick="editorDialogVente.show();"/>
+                            <p:commandButton value="Modifier Ligne Operation" disabled="#{venteBean.buttonDisabled}" id="edit_dialog" immediate="true" onclick="editorLigneOperation.show();"/>
+                            <p:commandButton value="Retirer Ligne Operation" disabled="#{venteBean.buttonDisabled}" id="remove_dialog" immediate="true" actionListener="#{venteBean.deleteLigneOperation(actionEvent)}"
+                                             update=":venteEdit:dataTable,:formDialog:produitTable, :venteEdit:edit_dialog, :venteEdit:remove_dialog"/>
+                        </h:panelGrid> 
+                    </p:fieldset>
+
+                    
                 </h:panelGrid>
             </h:form>
+           <h:form id="formDialog">
+               <!-- Boite de dialogue pour l'ajout d'un produit commandé -->
+                    <p:dialog widgetVar="editorDialogVente" width="70%" header="Produits en stock" id="addProduct">
+
+                        <!-- Liste des produits en stock -->
+                        <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
+                            <p:dataTable id="produitTable" paginatorPosition="bottom" var="produit" value="#{venteBean.allProduits}"
+                                         rowKey="#{produit.id}" selection="#{venteBean.produit}" selectionMode="single"
+                                         paginator="true" rows="10" rowsPerPageTemplate="2,3,4,5"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+                                <f:facet name="header">  
+                                    Liste des produits
+                                </f:facet>
+                                <p:ajax event="rowSelect" update=":formDialog:selectProduct"/>
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{produit.designation}" />
+                                </p:column>
+
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{produit.quantiteEnStock}" /> 
+                                </p:column>
+                            </p:dataTable>
+
+                            <!-- Produit selectionné -->
+                            <p:fieldset legend="Informations Produits">
+
+                                <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="selectProduct" >
+                                    <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.produit.designation}"  id="nomProduit" required="true" requiredMessage="Veuillez choisir un produit" />
+                                        <p:message for="nomProduit"/>
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.quantite}" id="quantiteProduit" />
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.prixUnitaire}" id="prixUnitaire" />
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="Action">
+                                <h:panelGrid columns="3" cellpadding="5">  
+                                    <p:commandButton value="Enregistrer" id="save" process=":formDialog:addProduct" actionListener="#{venteBean.addProduct(actionEvent)}" 
+                                                     update=":venteEdit:dataTable, :formDialog:produitTable, :formDialog:selectProduct, :venteEdit:edit_dialog, :venteEdit:remove_dialog, :messages"/>
+                                    <p:commandButton value="Annuler" immediate="true"  onclick="editorDialogVente.hide();"/>
+                                </h:panelGrid> 
+                            </p:fieldset>  
+                        </h:panelGrid>   
+                    </p:dialog>
+<!-- Boite de dialogue pour la correction d'un produit commandé -->
+                    <p:dialog widgetVar="editorLigneOperation" width="70%" header="Produits en stock" id="editorDialogForm">
+
+                        <!-- Liste des produits en stock -->
+                        <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
+                            
+
+                            <!-- Produit selectionné -->
+                            <p:fieldset legend="Informations sur le produit commandé">
+
+                                <h:panelGrid columns='2' cellpadding="2" style="width: 100%"  id="ligneOperationToEdit" >
+                                    <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
+                                    <h:panelGroup>
+                                        <p:inputText disabled="true" value="#{venteBean.ligneOperation.produit.designation}"  id="ligneOperationProduit" required="true" />
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.ligneOperation.quantite}" id="ligneOperationQuantite" />
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.ligneOperation.prixU}" id="ligneOperationPrixUnitaire" />
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="Action">
+                                <h:panelGrid columns="3" cellpadding="5">  
+                                    <p:commandButton value="Enregistrer" id="saveLigneOperation" process=":formDialog:editorDialogForm" actionListener="#{venteBean.editLigneOperation(actionEvent)}" update=":venteEdit:dataTable, :venteEdit:edit_dialog, :venteEdit:remove_dialog" oncomplete="editorLigneOperation.hide();"/>
+                                    <p:commandButton value="Annuler" immediate="true"  onclick="editorLigneOperation.hide();"/>
+                                </h:panelGrid> 
+                            </p:fieldset>  
+                        </h:panelGrid>   
+                    </p:dialog>
+               
+           </h:form>
         </ui:define>
+        
     </ui:composition>
 </html>

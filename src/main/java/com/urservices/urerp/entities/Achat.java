@@ -31,6 +31,7 @@ public class Achat extends Operation implements Serializable {
     public final static String FINDByID = "Achat.findById";
 
     public Achat() {
+        super();
     }
 
     public Achat(Long id, String numero, Date dateOperation) {

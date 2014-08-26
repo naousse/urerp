@@ -24,6 +24,8 @@ public interface IVenteEJBMetier {
     
     public Vente update(Vente vente);
     
+     public Vente update(Vente vente, List<LigneOperation> ligneOperations, List<LigneOperation> ligneOperationsoDelete);
+    
     public int delete(Vente vente);
     
     public Vente findById(Long id);

@@ -5,6 +5,7 @@
 package com.urservices.urerp.metier;
 
 import com.urservices.urerp.dao.IPaiementEJBDaoLocal;
+import com.urservices.urerp.entities.Operation;
 import com.urservices.urerp.entities.Paiement;
 import java.io.Serializable;
 import java.util.List;
@@ -48,7 +49,7 @@ public class PaiementEJBMetier implements IPaiementEJBMetierLocal, IPaiementEJBM
     }
 
     @Override
-    public List<Paiement> findAllPaiementsAchat(Long id) {
-        return iPaiementEJBDaoLocal.findAllPaiementsAchat(id);
+    public List<Paiement> findAllPaiementsOperation(Operation operation) {
+        return iPaiementEJBDaoLocal.findAllPaiementsOperation(operation);
     }
 }

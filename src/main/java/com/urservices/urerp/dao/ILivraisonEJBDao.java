@@ -5,6 +5,7 @@
 package com.urservices.urerp.dao;
 
 import com.urservices.urerp.entities.Livraison;
+import com.urservices.urerp.entities.Operation;
 import java.util.List;
 
 /**
@@ -22,5 +23,7 @@ public interface ILivraisonEJBDao {
     public Livraison findById(Long id);
     
     public List<Livraison> findAll();
+    
+     public List<Livraison> findAllLivraisonsOperation(Operation operation);
     
 }

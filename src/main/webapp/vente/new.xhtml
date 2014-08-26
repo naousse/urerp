@@ -17,7 +17,7 @@ and open the template in the editor.
         <ui:define name="content">
            <!--Formulaire de vente globale -->
             
-            <h:form id="venteNew">
+            <h:form id="operationNew">
                 
                 <!--Panel Grid globale -->
                 <h:panelGrid columns="1" cellpadding="1" style="width: 100%">
@@ -25,15 +25,15 @@ and open the template in the editor.
                     <!-- Zone d'information sur la vente -->
                     <p:fieldset legend="Informations sur la vente">
                         <!--Panel grid contenant la liste des informations sur la vente -->
-                        <h:panelGrid columns='4' cellpadding="2" style="width: 100%">
-                            <!--label et zone de texte pour le numéro de la vente -->
+                        <h:panelGrid columns='4' cellpadding="2" style="width: 100%" id="dataVente">
+                           
                             <p:outputLabel value="#{msg['urerp.view.vente.numero']}:"/>
                             <h:panelGroup>
                                 <p:inputText id="titre" value="#{venteBean.vente.numero}"
                                              required="true"  requiredMessage="Le numéro est obligatoire" />
                                 <p:message for="titre"/>
                             </h:panelGroup>
-                            <!--Label et calendrier pour la date de la vente -->
+                           
                             <p:outputLabel value="#{msg['urerp.view.vente.date']}:"/>
                             <h:panelGroup>
                                 <p:calendar value="#{venteBean.vente.dateOperation}" locale="fr">
@@ -52,7 +52,7 @@ and open the template in the editor.
                                                   required="true"  requiredMessage="La CNI est obligatoire" />
                                     <p:message for="cni"/>
                                 </h:panelGroup>
-                                <p:commandButton value="Search" id="search" process=":venteNew:searchDataVente" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":venteNew:clientPhysique" />
+                                <p:commandButton value="Search" id="search" process=":operationNew:searchDataVente" actionListener="#{venteBean.findClientPhysique(actionEvent)}" update=":operationNew:clientPhysique" />
                             </h:panelGrid>
                         
                         <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="clientPhysique">
@@ -90,6 +90,7 @@ and open the template in the editor.
                             <f:facet name="header">  
                                 Liste des produits commandés
                             </f:facet>
+                            <p:ajax event="rowSelect" update=":operationNew:edit_dialog,:operationNew:remove_dialog,:formDialog:ligneOperationToEdit"/>
                             <p:column>  
                                 <f:facet name="header">  
                                     <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
@@ -107,14 +108,22 @@ and open the template in the editor.
                     </h:panelGrid>
 
                     <p:fieldset legend="Action">
-                        <h:panelGrid columns="3" cellpadding="5">  
+                        <h:panelGrid columns="6" cellpadding="5">  
                             <p:commandButton value="Liste" action="#{venteBean.doList()}" ajax="false" immediate="true"/>
-                            <p:commandButton value="Ajouter" immediate="true" onclick="editorDialogVente.show();"/>
+                            
                             <p:commandButton value="Enregistrer" action="#{venteBean.doCreate}" ajax="false"/>
+                            <p:commandButton value="Ajouter des produits" immediate="true" onclick="editorDialogVente.show();"/>
+                            <p:commandButton value="Modifier Ligne Operation" disabled="#{venteBean.buttonDisabled}" id="edit_dialog" immediate="true" onclick="editorLigneOperation.show();"/>
+                            <p:commandButton value="Retirer Ligne Operation" disabled="#{venteBean.buttonDisabled}" id="remove_dialog" immediate="true" actionListener="#{venteBean.removeLigneOperation(actionEvent)}"
+                                             update=":operationNew:dataTable,:formDialog:produitTable, :operationNew:edit_dialog, :operationNew:remove_dialog"/>
                         </h:panelGrid> 
                     </p:fieldset>
 
-                    <!-- Boite de dialogue pour l'ajout d'un produit commandé -->
+                    
+                </h:panelGrid>
+            </h:form>
+           <h:form id="formDialog">
+               <!-- Boite de dialogue pour l'ajout d'un produit commandé -->
                     <p:dialog widgetVar="editorDialogVente" width="70%" header="Produits en stock" id="addProduct">
 
                         <!-- Liste des produits en stock -->
@@ -128,7 +137,7 @@ and open the template in the editor.
                                 <f:facet name="header">  
                                     Liste des produits
                                 </f:facet>
-                                <p:ajax event="rowSelect" update=":venteNew:selectProduct"/>
+                                <p:ajax event="rowSelect" update=":formDialog:selectProduct"/>
                                 <p:column>  
                                     <f:facet name="header">  
                                         <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
@@ -150,7 +159,8 @@ and open the template in the editor.
                                 <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="selectProduct" >
                                     <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
                                     <h:panelGroup>
-                                        <p:inputText value="#{venteBean.produit.designation}"  id="nomProduit" />
+                                        <p:inputText value="#{venteBean.produit.designation}"  id="nomProduit" required="true" requiredMessage="Veuillez choisir un produit" />
+                                        <p:message for="nomProduit"/>
                                     </h:panelGroup>
                                     <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
                                     <h:panelGroup>
@@ -164,15 +174,49 @@ and open the template in the editor.
                             </p:fieldset>
                             <p:fieldset legend="Action">
                                 <h:panelGrid columns="3" cellpadding="5">  
-                                    <p:commandButton value="Enregistrer" id="save" process=":venteNew:addProduct" actionListener="#{venteBean.addProduct(actionEvent)}" update=":venteNew:dataTable"/>
+                                    <p:commandButton value="Enregistrer" id="save" process=":formDialog:addProduct" actionListener="#{venteBean.addProduct(actionEvent)}" 
+                                                     update=":operationNew:dataTable, :formDialog:produitTable, :formDialog:selectProduct, :operationNew:edit_dialog, :operationNew:remove_dialog, :messages"/>
                                     <p:commandButton value="Annuler" immediate="true"  onclick="editorDialogVente.hide();"/>
                                 </h:panelGrid> 
                             </p:fieldset>  
                         </h:panelGrid>   
                     </p:dialog>
+<!-- Boite de dialogue pour la correction d'un produit commandé -->
+                    <p:dialog widgetVar="editorLigneOperation" width="70%" header="Produits en stock" id="editorDialogForm">
 
-                </h:panelGrid>
-            </h:form>
+                        <!-- Liste des produits en stock -->
+                        <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
+                            
+
+                            <!-- Produit selectionné -->
+                            <p:fieldset legend="Informations sur le produit commandé">
+
+                                <h:panelGrid columns='2' cellpadding="2" style="width: 100%"  id="ligneOperationToEdit" >
+                                    <p:outputLabel value="#{msg['urerp.view.produit.designation']}" />
+                                    <h:panelGroup>
+                                        <p:inputText disabled="true" value="#{venteBean.ligneOperation.produit.designation}"  id="ligneOperationProduit" required="true" />
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.produit.quantite']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.ligneOperation.quantite}" id="ligneOperationQuantite" />
+                                    </h:panelGroup>
+                                    <p:outputLabel value="#{msg['urerp.view.ligneOperation.prixUnitaire']}" />
+                                    <h:panelGroup>
+                                        <p:inputText value="#{venteBean.ligneOperation.prixU}" id="ligneOperationPrixUnitaire" />
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="Action">
+                                <h:panelGrid columns="3" cellpadding="5">  
+                                    <p:commandButton value="Enregistrer" id="saveLigneOperation" process=":formDialog:editorDialogForm" actionListener="#{venteBean.editLigneOperation(actionEvent)}" update=":operationNew:dataTable, :operationNew:edit_dialog, :operationNew:remove_dialog" oncomplete="editorLigneOperation.hide();"/>
+                                    <p:commandButton value="Annuler" immediate="true"  onclick="editorLigneOperation.hide();"/>
+                                </h:panelGrid> 
+                            </p:fieldset>  
+                        </h:panelGrid>   
+                    </p:dialog>
+               
+           </h:form>
         </ui:define>
+        
     </ui:composition>
 </html>

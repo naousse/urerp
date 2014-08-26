@@ -4,6 +4,7 @@
  */
 package com.urservices.urerp.dao;
 
+import com.urservices.urerp.entities.Operation;
 import com.urservices.urerp.entities.Paiement;
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface IPaiementEJBDao {
     
     public List<Paiement> findAll();
     
-    public List<Paiement> findAllPaiementsAchat(Long id);
+    public List<Paiement> findAllPaiementsOperation(Operation operation);
     
 }

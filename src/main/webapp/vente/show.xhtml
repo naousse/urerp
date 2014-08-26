@@ -22,17 +22,159 @@ and open the template in the editor.
             <h:form id="venteShow">
                 <h:panelGrid columns="1" cellpadding="5" style="width: 100%">
                     <p:fieldset legend="Information sur la vente">
-                        <p:panelGrid columns="6" style="width: 100%">
-                            <p:outputLabel value="#{msg['urerp.view.vente.numero']}"/>
-                            <h:outputText id="numeroVente" value="#{venteBean.vente.numero}"/>
-
-                            <p:outputLabel value="#{msg['urerp.view.vente.date']}"/>
-                            <h:outputText id="dateVente" value="#{venteBean.vente.dateOperation}">
-                                <f:convertDateTime pattern="dd/mm/yyyy" />
-                            </h:outputText>
-                        </p:panelGrid>
+                        <h:panelGrid columns="6" cellpadding="2" style="width: 100%">
+                            <p:outputLabel value="#{msg['urerp.view.vente.numero']}:"/>
+                            <h:panelGroup> 
+                                <h:outputLabel id="numeroVente" value="#{venteBean.vente.numero}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.vente.date']}:"/>
+                            <h:panelGroup> 
+                                <h:outputLabel id="dateVente" value="#{venteBean.vente.dateOperation}">
+                                    <f:convertDateTime pattern="dd/mm/yyyy" />
+                                </h:outputLabel>
+                            </h:panelGroup>
+                            <p:outputLabel value="Etat:"/>
+                            <h:panelGroup> 
+                                <h:outputLabel id="etat" value="#{venteBean.vente.numero}"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
                     </p:fieldset>
 
+                    <p:fieldset legend="Information sur le client">             
+                        <h:panelGrid columns='6' cellpadding="2" style="width: 100%" id="clientPhysique">
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.cni']}:"/>
+                            <h:panelGroup>  
+                                <p:outputLabel  value="#{venteBean.clientPhysique.cni}" id="cni"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.nom']}:"/>
+                            <h:panelGroup>
+                                <p:outputLabel value="#{venteBean.clientPhysique.nom}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.prenom']}:"/>
+                            <h:panelGroup>
+                                <p:outputLabel value="#{venteBean.clientPhysique.prenom}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.telephone']}:"/>
+                            <h:panelGroup>
+                                <p:outputLabel value="#{venteBean.clientPhysique.adresse.telephone}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.email']}:"/>
+                            <h:panelGroup>
+                                <p:outputLabel value="#{venteBean.clientPhysique.adresse.email}"/>
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['urerp.view.clientPhysique.boitePostal']}:"/>
+                            <h:panelGroup>
+                                <p:outputLabel value="#{venteBean.clientPhysique.adresse.boitePostal}"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Zone d'information sur la liste des produits commandés -->
+                    <p:fieldset legend="Liste des produits commandés"> 
+                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                            <p:dataTable id="dataTable" paginatorPosition="bottom" var="ligneOperation" value="#{venteBean.ligneOperations}"
+                                         rowKey="#{ligneOperation.id}" selection="#{venteBean.ligneOperation}" selectionMode="single"
+                                         paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                                </p:column>
+
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                                    </f:facet>
+                                    <h:outputText value="#{ligneOperation.quantite}" /> 
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Fin de la liste des produits commandés -->
+                    <!-- Zone d'information sur la liste des livraisons -->
+                    <p:fieldset legend="Liste des livraisons"> 
+                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                            <p:dataTable id="dataTableLivraison" paginatorPosition="bottom" var="livraison" value="#{venteBean.livraisons}"
+                                         rowKey="#{livraison.id}" selection="#{venteBean.livraison}" selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="Numéro" />  
+                                    </f:facet>
+                                    <h:outputText value="#{livraison.numero}" /> 
+                                </p:column>
+                                <p:ajax event="rowSelect" update=":formDialog:listeDesProduits"/>
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="Date" />  
+                                    </f:facet>
+                                    <h:outputText value="#{livraison.dateOperation}" /> 
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" cellpadding="5">  
+                            <p:button value="Effectuer Une Livraison" id="new_livraison_url" outcome="#{livraisonBean.newLivraisonUrl}" > 
+                                <f:param name="vente" value="#{venteBean.venteId}"/>
+                            </p:button>
+
+                            <p:commandButton immediate="true" value="Détail de la livraison" onclick="dialogDetailLivraison.show();"/>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Fin de la liste des livraisons des produits commandés -->
+                    <!-- Zone d'information sur la liste des paiements -->
+                    <p:fieldset legend="Liste des paiements"> 
+                        <h:panelGrid columns='4' cellpadding="10" style="width: 100%">
+                            <p:dataTable id="dataTablePaiements" paginatorPosition="bottom" editable="true" var="paiement" value="#{venteBean.paiements}"
+                                         rowKey="#{paiement.id}" selection="#{venteBean.paiement}" selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                         {RowsPerPageDropdown}"
+                                         >
+                                <p:ajax event="rowEdit" listener="#{venteBean.onPaiementRowEdit}" update=":messages" />
+                                <p:ajax event="rowEditCancel" listener="#{venteBean.onPaiementRowCancel}" update=":messages" />
+ 
+                                <p:column>  
+                                    <f:facet name="header">  
+                                        <h:outputText value="Numéro" />  
+                                    </f:facet>
+                                    <h:outputText value="#{paiement.numero}" /> 
+                                </p:column>
+                                <p:column headerText="Date Paiement">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{paiement.dateOperation}" /></f:facet>
+                                        <f:facet name="input">
+                                            <p:calendar id="modelInput" value="#{paiement.dateOperation}" locale="fr">
+                                            </p:calendar>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                 <p:column headerText="Montant">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{paiement.montant}" /></f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{paiement.montant}"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:32px">
+           <p:rowEditor />
+       </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" cellpadding="5">  
+                            <p:commandButton value="Définir Mode de Paiements"/>
+                            <p:button value="Ajouter Un Paiement"/>
+                            <p:button value="Corriger Un Paiement"/>
+                        </h:panelGrid> 
+                    </p:fieldset>
+                    <!-- Fin de la liste des paiements -->
                     <p:fieldset legend="Action">
                         <h:panelGrid columns="3" cellpadding="5">  
                             <p:commandButton value="Liste" action="#{venteBean.doList()}" ajax="false"/>
@@ -42,6 +184,47 @@ and open the template in the editor.
                         </h:panelGrid> 
                     </p:fieldset>
                 </h:panelGrid>
+            </h:form>
+            <h:form id="formDialog">
+                <!-- Boite de dialogue pour les détails de la livraison -->
+                <p:dialog widgetVar="dialogDetailLivraison" width="70%" header="Détails de la livraison: #{venteBean.livraison.numero}" id="listeDesProduits">
+
+                    <!-- Liste des produits en stock -->
+                    <h:panelGrid columns='1' cellpadding="10" style="width: 100%">
+                        <p:dataTable id="produitTable" paginatorPosition="bottom" var="ligneOperation" value="#{venteBean.ligneOperationsLivraison}"
+                                     rowKey="#{ligneOperation.id}" selection="#{venteBean.ligneOperation}" selectionMode="single"
+                                     paginator="true" rows="10" rowsPerPageTemplate="2,5,10,15"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                                     {RowsPerPageDropdown}"
+                                     >
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.designation']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.produit.designation}" /> 
+                            </p:column>
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="#{msg['urerp.view.produit.quantite']}" />  
+                                </f:facet>
+                                <h:outputText value="#{ligneOperation.quantite}" /> 
+                            </p:column>
+                        </p:dataTable>
+
+
+                        <p:fieldset legend="Action">
+                            <h:panelGrid columns="3" cellpadding="5">  
+                                <p:button value="Corriger la livraison" id="edit_url_livraison" outcome="#{livraisonBean.editUrl}"> 
+                                    <f:param name="livraison" value="#{venteBean.livraison.id}"/>
+                                </p:button>
+                                <p:commandButton value="Annuler" immediate="true"  onclick="dialodDetailLivraison.hide();"/>
+                            </h:panelGrid> 
+                        </p:fieldset>  
+                    </h:panelGrid>   
+                </p:dialog>
+
             </h:form>
         </ui:define>
     </ui:composition>
